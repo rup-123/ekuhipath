@@ -12,6 +12,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.e_kuhipath.MainActivity
 import com.example.e_kuhipath.R
+import com.example.e_kuhipath.activities.authentication.LoginActivity
 
 class SplashActivity: AppCompatActivity() {
 
@@ -35,7 +36,7 @@ class SplashActivity: AppCompatActivity() {
         // we used the postDelayed(Runnable, time) method
         // to send a message with a delayed time.
         Handler().postDelayed({
-            val intent = Intent(this, MainActivity::class.java)
+            val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
             finish()
         }, 3000) // 3000 is the delayed time in milliseconds.

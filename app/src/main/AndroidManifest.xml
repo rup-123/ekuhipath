@@ -18,7 +18,18 @@
             android:exported="true"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
-
+        <activity
+            android:name=".activities.authentication.LoginActivity"
+            android:configChanges="orientation|screenSize"
+            android:exported="true"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
+            android:name=".activities.authentication.RegisterActivity"
+            android:configChanges="orientation|screenSize"
+            android:exported="true"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
         <activity
             android:name=".activities.initials.SplashActivity"
             android:configChanges="orientation|screenSize"
@@ -30,6 +41,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>
