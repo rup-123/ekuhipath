@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+    <item android:title="Profile">
+        <menu>
+            <item
+                android:id="@+id/nav_home"
+                android:icon="@drawable/home_img"
+                android:title="Home" />
+            <item
+                android:id="@+id/nav_change_password"
+                android:icon="@drawable/help"
+                android:title="Help and Feedback" />
+            <item
+                android:id="@+id/nav_signout"
+                android:icon="@drawable/logout"
+                android:title="LogOut" />
+
+        </menu>
+    </item>
+    <!--<item android:title="ChangePassword">
+        <menu>
+            <item
+                android:id="@+id/nav_change_password"
+                android:icon="@drawable/change_password"
+                android:title="Change Password" />
+        </menu>
+    </item>
+    <item android:title="SignOut">
+        <menu>
+            <item
+                android:id="@+id/nav_signout"
+                android:icon="@drawable/ic_signout"
+                android:title="SignOut" />
+
+        </menu>
+    </item>-->
+
+</menu>

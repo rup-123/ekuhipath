@@ -1,35 +1,23 @@
-package com.example.e_kuhipath.activities.authentication
+package com.example.e_kuhipath.activities.landingpage
 
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.e_kuhipath.R
-import com.example.e_kuhipath.activities.landingpage.WelcomeActivity
+import com.example.e_kuhipath.activities.authentication.RegisterActivity
 
-class LoginActivity: AppCompatActivity() {
+class WelcomeActivity: AppCompatActivity() {
 
     private var pressedTime: Long = 0
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
-
-        val register = findViewById<TextView>(R.id.register_tv)
-        val loginbtn = findViewById<Button>(R.id.login_btn)
-        register.setOnClickListener{
-            val intent = Intent(this,RegisterActivity::class.java)
-            startActivity(intent)
-        }
-        loginbtn.setOnClickListener{
-            val intent = Intent(this,WelcomeActivity::class.java)
-            startActivity(intent)
-        }
+        setContentView(R.layout.activity_welcome)
 
 
     }
