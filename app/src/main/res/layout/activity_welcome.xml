@@ -12,13 +12,13 @@
         android:background="@color/white"
         android:fitsSystemWindows="true">
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/name_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="22dp"
             android:layout_marginTop="10dp"
             android:fontFamily="@font/nunito_semibold"
-            android:text="Hello, Rupjyoti Das!"
+            android:text=""
             android:textColor="@color/black"
             android:textSize="25sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -64,7 +64,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="e-kuhipath"
+                    android:text="eKuhipath"
                     android:fontFamily="@font/nunito_bold"
                     android:textSize="20sp"
                     android:textColor="@color/colorPrimaryDark"/>
