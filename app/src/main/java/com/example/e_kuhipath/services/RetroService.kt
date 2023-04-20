@@ -47,4 +47,14 @@ interface RetroService {
     fun getLogoutTokens(
         @Header("Authorization") accesstoken: String
     ): Call<StudentLogoutTokens>
+
+    @GET("video-course/get-unpaid-courses")
+    fun getUnpaidCourses(
+        @Header("Authorization") accesstoken: String
+    ): Call<UnpaidCourseReturn>
+
+    @GET("video-course/get-unpaid-course-details/{id}")
+    fun getUnpaidCourseDetails(
+        @Path(value = "id", encoded = true)courseid:String, @Header("Authorization") accesstoken: String
+    ): Call<UnpaidCourseDetailsReturn>
 }

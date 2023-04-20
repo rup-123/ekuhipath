@@ -173,7 +173,8 @@ class LoginActivity: AppCompatActivity() {
                                         //   awesomeValidation.addValidation(uniqueid,"^[A-Za-z\\s]{1,}[\\.]{0,1}[A-Za-z\\s]{0,}$", message)
 
                                     }
-                                } else {
+                                }
+                                else {
                                     Toast.makeText(
                                         this@LoginActivity,
                                         "error code: " + response.code(),
