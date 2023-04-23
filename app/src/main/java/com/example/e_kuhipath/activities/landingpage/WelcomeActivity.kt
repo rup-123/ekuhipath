@@ -8,11 +8,9 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
 import android.view.Window
-import android.widget.LinearLayout
-import android.widget.TextView
-import android.widget.Toast
-import android.widget.Toolbar
+import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -20,6 +18,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import com.example.e_kuhipath.R
 import com.example.e_kuhipath.activities.authentication.LoginActivity
 import com.example.e_kuhipath.activities.authentication.RegisterActivity
+import com.example.e_kuhipath.activities.common.BottomNavActivity
 import com.example.e_kuhipath.activities.pages.UnpaidCoursesActivity
 import com.example.e_kuhipath.models.StudentLoginTokens
 import com.example.e_kuhipath.models.StudentLogoutTokens
@@ -172,6 +171,17 @@ class WelcomeActivity: AppCompatActivity() {
             val intent = Intent(this,UnpaidCoursesActivity::class.java)
             startActivity(intent)
         }
+
+        val home = findViewById<View>(R.id.home)
+        val purchases = findViewById<View>(R.id.purchases)
+        val downloads = findViewById<View>(R.id.downloads)
+        val help = findViewById<View>(R.id.help)
+
+
+        home.setOnClickListener(BottomNavActivity(this))
+        purchases.setOnClickListener(BottomNavActivity(this))
+        downloads.setOnClickListener(BottomNavActivity(this))
+        help.setOnClickListener(BottomNavActivity(this))
     }
 
     override fun onBackPressed() {

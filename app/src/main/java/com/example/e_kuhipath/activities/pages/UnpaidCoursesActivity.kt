@@ -33,6 +33,9 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.lang.Exception
 
+object GlobalUnpaidCourses {
+    var unpaidCourseReturn: UnpaidCourseReturn? = null
+}
 class UnpaidCoursesActivity: AppCompatActivity() {
     private var PRIVATE_MODE = 0
     lateinit var sharedPref: SharedPreferences
@@ -46,6 +49,7 @@ class UnpaidCoursesActivity: AppCompatActivity() {
 
         val backbtn = findViewById<ImageView>(R.id.unpaid_backbtn)
         backbtn.setOnClickListener{
+            GlobalUnpaidCourses.unpaidCourseReturn = null
             val intent = Intent(this,WelcomeActivity::class.java)
             startActivity(intent)
         }
@@ -72,97 +76,104 @@ class UnpaidCoursesActivity: AppCompatActivity() {
         val retroService: RetroService = ServiceBuilder.buildService(
             RetroService::class.java
         )
-        if (isOnline== true) {
-            lifecycleScope.launch {
-                try {
-                    showProgressDialog()
-                    val requestcall1: Call<UnpaidCourseReturn> = retroService.getUnpaidCourses(final_token)
-                    requestcall1.enqueue(object : Callback<UnpaidCourseReturn> {
+        if (GlobalUnpaidCourses.unpaidCourseReturn!=null){
+            setupUI(GlobalUnpaidCourses.unpaidCourseReturn!!)
+        }
+        else{
+            if (isOnline== true) {
+                lifecycleScope.launch {
+                    try {
+                        showProgressDialog()
+                        val requestcall1: Call<UnpaidCourseReturn> = retroService.getUnpaidCourses(final_token)
+                        requestcall1.enqueue(object : Callback<UnpaidCourseReturn> {
 
-                        override fun onResponse(
-                            call: Call<UnpaidCourseReturn>,
-                            response: Response<UnpaidCourseReturn>
-                        ) {
-                            Log.i("qqq", "sucessfull------->")
-                            if (response.isSuccessful) {
-                                val code = response.body()
-                                if (code == null) {
-                                    Toast.makeText(
-                                        this@UnpaidCoursesActivity,
-                                        "Wrong Code!!",
-                                        Toast.LENGTH_SHORT
-                                    )
-                                        .show()
-                                } else {
-                                    dialog.hide()
-                                    if (code.data.unpaidcourse.isEmpty()) {
-                                        unpaidcourse_recycler_view.visibility = View.GONE
-                                        no_unpaidcourse_ll.visibility = View.VISIBLE
-                                        /* val buttonLayoutParams: LinearLayout.LayoutParams =
-                                             LinearLayout.LayoutParams(
-                                                 ViewGroup.LayoutParams.WRAP_CONTENT,
-                                                 ViewGroup.LayoutParams.WRAP_CONTENT
-                                             )
-                                         buttonLayoutParams.setMargins(250, 500, 100, 0)
-                                         no_subjects_ll.setLayoutParams(buttonLayoutParams)*/
-                                    }
-                                    else {
-                                        unpaidcourse_recycler_view.visibility = View.VISIBLE
-                                        no_unpaidcourse_ll.visibility = View.GONE
-                                        setupUI(code)
-                                        Log.i("qqq", "response->" + response)
-                                        Log.i("qqq", "code->" + response.body()!!)
-                                    }
-
-                                }
-                            } else {
-                                if (response.code() == 401) {
-                                    val b = JSONObject(response.errorBody()!!.string())
-
-                                    if (b.has("message")) {
-                                        val message = b.get("message").toString()
-                                        Log.i("zzg", "message---->" + message)
-
+                            override fun onResponse(
+                                call: Call<UnpaidCourseReturn>,
+                                response: Response<UnpaidCourseReturn>
+                            ) {
+                                Log.i("qqq", "sucessfull------->")
+                                if (response.isSuccessful) {
+                                    val code = response.body()
+                                    if (code == null) {
                                         Toast.makeText(
                                             this@UnpaidCoursesActivity,
-                                            message,
+                                            "Wrong Code!!",
                                             Toast.LENGTH_SHORT
-                                        ).show()
-                                        //  edittext.requestFocus()
-                                        //  awesomeValidation.addValidation(dialog,R.id.complainuniqueid, "^[A-Za-z\\s]{1,}[\\.]{0,1}[A-Za-z\\s]{0,}$", message)
-                                        //   awesomeValidation.addValidation(uniqueid,"^[A-Za-z\\s]{1,}[\\.]{0,1}[A-Za-z\\s]{0,}$", message)
+                                        )
+                                            .show()
+                                    } else {
+                                        dialog.hide()
+                                        GlobalUnpaidCourses.unpaidCourseReturn = code
+                                        if (code.data.unpaidcourse.isEmpty()) {
+                                            unpaidcourse_recycler_view.visibility = View.GONE
+                                            no_unpaidcourse_ll.visibility = View.VISIBLE
+                                            /* val buttonLayoutParams: LinearLayout.LayoutParams =
+                                                 LinearLayout.LayoutParams(
+                                                     ViewGroup.LayoutParams.WRAP_CONTENT,
+                                                     ViewGroup.LayoutParams.WRAP_CONTENT
+                                                 )
+                                             buttonLayoutParams.setMargins(250, 500, 100, 0)
+                                             no_subjects_ll.setLayoutParams(buttonLayoutParams)*/
+                                        }
+                                        else {
+                                            unpaidcourse_recycler_view.visibility = View.VISIBLE
+                                            no_unpaidcourse_ll.visibility = View.GONE
+                                            setupUI(code)
+                                            Log.i("qqq", "response->" + response)
+                                            Log.i("qqq", "code->" + response.body()!!)
+                                        }
 
                                     }
-                                }
-                                else if (response.code() == 400){
-                                    dialog.hide()
-                                    val jObjError = JSONObject(response.errorBody()!!.string())
-                                    if (jObjError.has("message")){
-                                        val message = jObjError.get("message").toString()
-                                        Toast.makeText(context,message, Toast.LENGTH_LONG).show()
+                                } else {
+                                    if (response.code() == 401) {
+                                        val b = JSONObject(response.errorBody()!!.string())
+
+                                        if (b.has("message")) {
+                                            val message = b.get("message").toString()
+                                            Log.i("zzg", "message---->" + message)
+
+                                            Toast.makeText(
+                                                this@UnpaidCoursesActivity,
+                                                message,
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                            //  edittext.requestFocus()
+                                            //  awesomeValidation.addValidation(dialog,R.id.complainuniqueid, "^[A-Za-z\\s]{1,}[\\.]{0,1}[A-Za-z\\s]{0,}$", message)
+                                            //   awesomeValidation.addValidation(uniqueid,"^[A-Za-z\\s]{1,}[\\.]{0,1}[A-Za-z\\s]{0,}$", message)
+
+                                        }
+                                    }
+                                    else if (response.code() == 400){
+                                        dialog.hide()
+                                        val jObjError = JSONObject(response.errorBody()!!.string())
+                                        if (jObjError.has("message")){
+                                            val message = jObjError.get("message").toString()
+                                            Toast.makeText(context,message, Toast.LENGTH_LONG).show()
+                                        }
                                     }
                                 }
                             }
-                        }
 
 
-                        override fun onFailure(call: Call<UnpaidCourseReturn>, t: Throwable) {
+                            override fun onFailure(call: Call<UnpaidCourseReturn>, t: Throwable) {
 
-                            Log.i("www", "failure@----->" + t.message)
-                            val intent = Intent(context, NoInternetActivity::class.java)
-                            startActivity(intent)
-                        }
+                                Log.i("www", "failure@----->" + t.message)
+                                val intent = Intent(context, NoInternetActivity::class.java)
+                                startActivity(intent)
+                            }
 
-                    })
-                } catch (e: Exception) {
-                    Log.i("zzz","exception--->"+e)
+                        })
+                    } catch (e: Exception) {
+                        Log.i("zzz","exception--->"+e)
+                    }
                 }
             }
+            else if (isOnline == false){
+                val intent = Intent(context, NoInternetActivity::class.java)
+                startActivity(intent)
+            }
         }
-        else if (isOnline == false){
-            val intent = Intent(context, NoInternetActivity::class.java)
-            startActivity(intent)
-        }
+
     }
 
     private fun showProgressDialog() {
@@ -182,6 +193,7 @@ class UnpaidCoursesActivity: AppCompatActivity() {
     }
 
     override fun onBackPressed() {
+        GlobalUnpaidCourses.unpaidCourseReturn = null
         val intent = Intent(this,WelcomeActivity::class.java)
         startActivity(intent)
     }

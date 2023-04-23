@@ -24,6 +24,10 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+        debug {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -89,5 +93,11 @@ dependencies {
 
     //shimmer layout
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
+
+    //exoplayer
+    implementation 'com.google.android.exoplayer:exoplayer:2.16.1'
+
+    //ribbon
+    implementation "com.github.skydoves:androidribbon:1.0.4"
 
 }

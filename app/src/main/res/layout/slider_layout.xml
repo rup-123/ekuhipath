@@ -20,10 +20,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:fontFamily="@font/nunito_semibold"
+        android:fontFamily="@font/nunito_bold"
         android:layout_marginHorizontal="10dp"
         android:textColor="@color/black"
-        android:textSize="20sp"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/img" />
@@ -51,14 +51,14 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/nunito_semibold"
             android:layout_gravity="center"
-            android:textColor="@color/black"
+            android:textColor="#13CE3F"
             android:textSize="15sp" />
     </FrameLayout>
 
     <TextView
         android:id="@+id/buy_now"
-        android:layout_width="200dp"
-        android:layout_height="50dp"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="105dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="106dp"
@@ -68,7 +68,7 @@
         android:text="Buy Now"
         android:textAlignment="center"
         android:textColor="@color/white"
-        android:textSize="20sp"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fl" />

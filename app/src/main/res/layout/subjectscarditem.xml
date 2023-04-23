@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="50dp"
     android:layout_margin="10dp"
-    android:background="@drawable/card_bg"
+    android:background="@drawable/bluecard_bg"
     android:translationZ="20dp">
 
     <TextView
@@ -17,6 +17,6 @@
         android:fontFamily="@font/nunito_semibold"
         android:textAlignment="center"
         android:textColor="@color/black"
-        android:textSize="18sp" />
+        android:textSize="15sp" />
 </LinearLayout>
 

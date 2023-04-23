@@ -13,22 +13,17 @@ import android.view.View
 import android.view.Window
 import android.webkit.WebView
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.e_kuhipath.R
-import com.example.e_kuhipath.activities.adapters.UnpaidCourseAdapter
 import com.example.e_kuhipath.activities.adapters.UnpaidCourseSubjectsAdapter
-import com.example.e_kuhipath.activities.landingpage.WelcomeActivity
 import com.example.e_kuhipath.models.UnpaidCourseDetailsReturn
-import com.example.e_kuhipath.models.UnpaidCourseReturn
 import com.example.e_kuhipath.services.RetroService
 import com.example.e_kuhipath.services.ServiceBuilder
 import com.example.e_kuhipath.utils.IsOnline
@@ -38,6 +33,8 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.lang.Exception
+
+
 
 class UnpaidCourseDetailsActivity: AppCompatActivity() {
 
@@ -75,7 +72,6 @@ class UnpaidCourseDetailsActivity: AppCompatActivity() {
         val final_token = "Bearer " + accesstoken
         Log.i("vvv", final_token)
 
-
         val retroService: RetroService = ServiceBuilder.buildService(
             RetroService::class.java
         )
@@ -103,46 +99,8 @@ class UnpaidCourseDetailsActivity: AppCompatActivity() {
                                         .show()
                                 } else {
                                     dialog.dismiss()
-                                    val price_tv =  findViewById<TextView>(R.id.price_tv)
-                                    val subject_tv =  findViewById<TextView>(R.id.subject_tv)
-                                    val buy_now = findViewById<TextView>(R.id.buy_now)
-                                    price_tv.visibility = View.VISIBLE
-                                    subject_tv.visibility = View.VISIBLE
-                                    buy_now.visibility = View.VISIBLE
-                                    val img = findViewById<ImageView>(R.id.img_coursedetails)
-                                    val unpaid_course_name = findViewById<TextView>(R.id.unpaid_course_name)
-                                    val price = findViewById<TextView>(R.id.price)
-                                    val view = findViewById<WebView>(R.id.web_view)
+                                    setUpUi(code,sub_course_id)
 
-
-                                    view.setBackgroundColor(Color.TRANSPARENT)
-                                    val data = code.data.unpaidcourse.sub_course_details
-                                    //val data = "<html><p class=\"MsoNormal\" style=\"text-align:justify\"><span lang=\"EN-US\" style=\"font-size:12.0pt;line-height:107%;font-family:&quot;Book Antiqua&quot;,serif\">It<br>has both quantitative and reasoning part as prescribed in the new <b>APSC CCE<br>Syllabus</b>. The course will have around 30 lectures. Course materials can be<br>downloaded from the website and the students will have access to the video<br>lectures for six months from the date of enrollment.<o:p></o:p></span></p></html>"
-                                    view.loadData(data, "text/html; charset=utf-8", "utf-8")
-                                    val img_url = "https://www.ekuhipath.com/api/ekuhipath-v1/video-course/get-course-thumbnail/" + sub_course_id
-                                    Glide.with(context)
-                                        .load(img_url)
-                                        .timeout(60000)
-                                        .into(img)
-                                    Log.i("zz","img_url--->"+img_url)
-                                    unpaid_course_name.text = code.data.unpaidcourse.sub_course_name
-                                    price.text = "\u20B9"+code.data.unpaidcourse.price
-
-
-                                    val subjects_recycler_view = findViewById<RecyclerView>(R.id.subjects_recycler_view)
-                                    subjects_recycler_view.layoutManager = LinearLayoutManager(this@UnpaidCourseDetailsActivity)
-                                    val unpaidcoursesubjectsAdapter = UnpaidCourseSubjectsAdapter(code.data.subjects)
-
-                                    subjects_recycler_view.adapter = unpaidcoursesubjectsAdapter
-
-                                    buy_now.setOnClickListener{
-                                        if (code.data.unpaidcourse.payment_type == "OFF"){
-                                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(code.data.unpaidcourse.g_form_link))
-
-                                            // Start activity to open URL
-                                            context.startActivity(intent)
-                                        }
-                                    }
 
                                 }
                             } else {
@@ -194,6 +152,55 @@ class UnpaidCourseDetailsActivity: AppCompatActivity() {
             startActivity(intent)
         }
 
+
+
+
+    }
+
+    private fun setUpUi(unpaidCourseDetailsReturn: UnpaidCourseDetailsReturn, sub_course_id: String) {
+        val price_tv =  findViewById<TextView>(R.id.price_tv)
+        val subject_tv =  findViewById<TextView>(R.id.subject_tv)
+        val buy_now = findViewById<TextView>(R.id.buy_now)
+        price_tv.visibility = View.VISIBLE
+        subject_tv.visibility = View.VISIBLE
+        buy_now.visibility = View.VISIBLE
+        val img = findViewById<ImageView>(R.id.img_coursedetails)
+        val unpaid_course_name = findViewById<TextView>(R.id.unpaid_course_name)
+        val price = findViewById<TextView>(R.id.price)
+        val view = findViewById<WebView>(R.id.web_view)
+
+
+        view.setBackgroundColor(Color.TRANSPARENT)
+        val data = unpaidCourseDetailsReturn.data.unpaidcourse.sub_course_details
+        //val data = "<html><p class=\"MsoNormal\" style=\"text-align:justify\"><span lang=\"EN-US\" style=\"font-size:12.0pt;line-height:107%;font-family:&quot;Book Antiqua&quot;,serif\">It<br>has both quantitative and reasoning part as prescribed in the new <b>APSC CCE<br>Syllabus</b>. The course will have around 30 lectures. Course materials can be<br>downloaded from the website and the students will have access to the video<br>lectures for six months from the date of enrollment.<o:p></o:p></span></p></html>"
+        view.loadData(data, "text/html; charset=utf-8", "utf-8")
+        val img_url = "https://www.ekuhipath.com/api/ekuhipath-v1/video-course/get-course-thumbnail/" + sub_course_id
+        Glide.with(context)
+            .load(img_url)
+            .timeout(60000)
+            .into(img)
+        Log.i("zz","img_url--->"+img_url)
+        unpaid_course_name.text = unpaidCourseDetailsReturn.data.unpaidcourse.sub_course_name
+        price.text = "\u20B9"+unpaidCourseDetailsReturn.data.unpaidcourse.price
+
+
+        val subjects_recycler_view = findViewById<RecyclerView>(R.id.subjects_recycler_view)
+        subjects_recycler_view.layoutManager = LinearLayoutManager(this@UnpaidCourseDetailsActivity)
+        val unpaidcoursesubjectsAdapter = UnpaidCourseSubjectsAdapter(unpaidCourseDetailsReturn.data.subjects)
+
+        subjects_recycler_view.adapter = unpaidcoursesubjectsAdapter
+
+        buy_now.setOnClickListener{
+            if (unpaidCourseDetailsReturn.data.unpaidcourse.payment_type == "OFF"){
+                val gformlink = "https://"+unpaidCourseDetailsReturn.data.unpaidcourse.g_form_link
+                try {
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(gformlink))
+                    context.startActivity(intent)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+        }
     }
 
     private fun showProgressDialog() {

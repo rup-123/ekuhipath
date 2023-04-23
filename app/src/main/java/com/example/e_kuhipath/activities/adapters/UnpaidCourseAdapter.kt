@@ -22,6 +22,7 @@ import com.example.e_kuhipath.R
 import com.example.e_kuhipath.activities.pages.UnpaidCourseDetailsActivity
 import com.example.e_kuhipath.models.UnpaidCourses
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.skydoves.androidribbon.ShimmerRibbonView
 
 class UnpaidCourseAdapter(var unpaidcourses: UnpaidCourses): RecyclerView.Adapter<UnpaidCourseAdapter.DataViewHolder>() {
 
@@ -32,6 +33,7 @@ class UnpaidCourseAdapter(var unpaidcourses: UnpaidCourses): RecyclerView.Adapte
         val unpaid_course_name = v.findViewById<TextView>(R.id.unpaid_course_name)
         val buy_now = v.findViewById<TextView>(R.id.buy_now)
         val image = v.findViewById<ImageView>(R.id.imageView)
+        val shimmerview = v.findViewById<ShimmerRibbonView>(R.id.shimmerview_unpaidcourses)
         val view_details = v.findViewById<TextView>(R.id.view_details)
 
     }
@@ -52,6 +54,9 @@ class UnpaidCourseAdapter(var unpaidcourses: UnpaidCourses): RecyclerView.Adapte
             .timeout(60000)
             .circleCrop()
             .into(holder.image)
+
+        holder.shimmerview.ribbon.text = "\u20B9"+unpaidcourses.unpaidcourse[position].price
+        holder.shimmerview.ribbon.setBackgroundColor(Color.parseColor("#13CE3F"))
 
         holder.buy_now.setOnClickListener{
             if (sliderLayout.getParent() != null) {
@@ -82,10 +87,14 @@ class UnpaidCourseAdapter(var unpaidcourses: UnpaidCourses): RecyclerView.Adapte
 
             buy_now.setOnClickListener{
                 if (unpaidcourses.unpaidcourse[position].payment_type == "OFF"){
-                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(unpaidcourses.unpaidcourse[position].g_form_link))
-
-                    // Start activity to open URL
-                    context.startActivity(intent)
+                   // Log.i("zz","gformlink--->"+unpaidcourses.unpaidcourse[position].g_form_link)
+                    val gformlink = "https://"+unpaidcourses.unpaidcourse[position].g_form_link
+                    try {
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(gformlink))
+                        context.startActivity(intent)
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
                 }
             }
         }
