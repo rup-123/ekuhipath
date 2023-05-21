@@ -14,9 +14,7 @@ import android.os.Bundle
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.*
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.WindowCompat
@@ -26,8 +24,10 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import com.bumptech.glide.Glide
 import com.example.e_kuhipath.R
+import com.example.e_kuhipath.utils.CustomSpinnerAdapter
 import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.MediaItem
+import com.google.android.exoplayer2.PlaybackParameters
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.source.hls.HlsMediaSource
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout
@@ -40,7 +40,7 @@ class VideoDialogFragment : DialogFragment(), AudioManager.OnAudioFocusChangeLis
     private var player: SimpleExoPlayer? = null
     private lateinit var playPauseBtn: ImageButton
     private lateinit var fullScreenBtn: ImageButton
-
+    private lateinit var orientationBtn: ImageButton
     private var videoUrl: String? = null
     private var videoThumbnail: String? = null
     private lateinit var thumbnailImageView: ImageView
@@ -52,6 +52,10 @@ class VideoDialogFragment : DialogFragment(), AudioManager.OnAudioFocusChangeLis
     private var final_token: String? = null
     private var isFullScreen = false
     private var audioManager:AudioManager? = null
+
+    private lateinit var speedSpinner: Spinner
+
+    private val playbackSpeeds = floatArrayOf(1.0f,1.25f, 1.5f, 2.0f)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NO_TITLE,R.style.playerActivityTheme)
@@ -74,6 +78,7 @@ class VideoDialogFragment : DialogFragment(), AudioManager.OnAudioFocusChangeLis
         playerView = view.findViewById<PlayerView>(R.id.player_view)
         playPauseBtn = playerView.findViewById(R.id.playPauseBtn)
         fullScreenBtn = playerView.findViewById(R.id.fullScreenBtn)
+        orientationBtn = playerView.findViewById(R.id.orientationBtn)
         val play_btn = view.findViewById<ImageButton>(R.id.play_button)
         val nextbtn = playerView.findViewById<ImageButton>(R.id.nextBtn)
         val prevbtn = playerView.findViewById<ImageButton>(R.id.prevBtn)
@@ -81,7 +86,43 @@ class VideoDialogFragment : DialogFragment(), AudioManager.OnAudioFocusChangeLis
         playerView.controllerAutoShow = true
         playerView.controllerHideOnTouch = true
 
+        speedSpinner = view.findViewById(R.id.speedSpinner)
 
+        // Set up the ArrayAdapter for the Spinner
+        val adapter = context?.let {
+            CustomSpinnerAdapter(
+                it,
+                resources.getStringArray(R.array.speeds)
+            )
+        }
+
+        adapter?.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        speedSpinner.adapter = adapter
+
+        speedSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                val selectedSpeed = playbackSpeeds[position]
+                setPlaybackSpeed(selectedSpeed)
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                // Do nothing
+            }
+        }
+
+
+        orientationBtn.setOnClickListener{
+            activity?.requestedOrientation = if(resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT)
+                ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
+            else
+                ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT
+
+        }
         fullScreenBtn.setOnClickListener{
             if (isFullScreen){
                 isFullScreen = false
@@ -156,7 +197,7 @@ class VideoDialogFragment : DialogFragment(), AudioManager.OnAudioFocusChangeLis
            play_btn.visibility = View.GONE
            fl2.visibility = View.GONE
            playerView.visibility = View.VISIBLE
-
+           speedSpinner.visibility = View.VISIBLE
            if (player == null){
                buildPlayer()
            }
@@ -171,6 +212,7 @@ class VideoDialogFragment : DialogFragment(), AudioManager.OnAudioFocusChangeLis
            play_btn.visibility = View.GONE
            fl2.visibility = View.GONE
            playerView.visibility = View.VISIBLE
+           speedSpinner.visibility = View.VISIBLE
 
            if (player == null){
                buildPlayer()
@@ -197,6 +239,11 @@ class VideoDialogFragment : DialogFragment(), AudioManager.OnAudioFocusChangeLis
         }
 
         return view
+    }
+
+    private fun setPlaybackSpeed(selectedSpeed: Float) {
+        val playbackParameters = PlaybackParameters(selectedSpeed)
+        player?.setPlaybackParameters(playbackParameters)
     }
 
     private fun buildPlayer() {
@@ -318,7 +365,7 @@ class VideoDialogFragment : DialogFragment(), AudioManager.OnAudioFocusChangeLis
      }*/
 
 
-    override fun onConfigurationChanged(newConfig: Configuration) {
+    /*override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
             // Exit full screen mode when the orientation changes to portrait
@@ -326,7 +373,7 @@ class VideoDialogFragment : DialogFragment(), AudioManager.OnAudioFocusChangeLis
             playerContainer?.removeView(playerView)
             playerContainer?.visibility = View.GONE
         }
-    }
+    }*/
 
 
 
@@ -408,15 +455,4 @@ class VideoDialogFragment : DialogFragment(), AudioManager.OnAudioFocusChangeLis
 
 }
 
-
-// clicking on the link code
-
-/*val videoUrl = "https://example.com/playlist.m3u8"
-val cardView = findViewById<CardView>(R.id.card_view)
-cardView.setOnClickListener {
-    val dialogFragment = VideoDialogFragment()
-    val args = Bundle()
-    args.putString("video_url", videoUrl)
-    dialogFragment.arguments = args
-    dialogFragment.show(supportFragmentManager, "VideoDialogFragment")
-}*/
+// generate otp -> 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
