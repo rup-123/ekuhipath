@@ -125,6 +125,7 @@ class UnpaidCoursesActivity: AppCompatActivity() {
 
                                     }
                                 } else {
+                                    dialog.hide()
                                     if (response.code() == 401) {
                                         val b = JSONObject(response.errorBody()!!.string())
 
@@ -144,7 +145,7 @@ class UnpaidCoursesActivity: AppCompatActivity() {
                                         }
                                     }
                                     else if (response.code() == 400){
-                                        dialog.hide()
+
                                         val jObjError = JSONObject(response.errorBody()!!.string())
                                         if (jObjError.has("message")){
                                             val message = jObjError.get("message").toString()

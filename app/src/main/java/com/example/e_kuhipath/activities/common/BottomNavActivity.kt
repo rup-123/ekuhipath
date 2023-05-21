@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 import android.util.Log
 import android.view.View
 import com.example.e_kuhipath.R
+import com.example.e_kuhipath.activities.pages.PaidCoursesActivity
 
 class BottomNavActivity(context: Context) : View.OnClickListener{
     var context = context
@@ -27,7 +28,8 @@ class BottomNavActivity(context: Context) : View.OnClickListener{
 
             R.id.purchases->{
                 Log.i("aa","id--->"+v.id)
-                Log.i("aa","purchases clicked--->")
+                val intent = Intent(context,PaidCoursesActivity::class.java)
+                context.startActivity(intent)
             }
 
             R.id.downloads->{

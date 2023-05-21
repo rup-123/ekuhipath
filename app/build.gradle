@@ -95,9 +95,15 @@ dependencies {
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
 
     //exoplayer
-    implementation 'com.google.android.exoplayer:exoplayer:2.16.1'
+    implementation 'com.google.android.exoplayer:exoplayer:2.14.1'
+    implementation 'com.google.android.exoplayer:exoplayer-core:2.14.1'
 
     //ribbon
     implementation "com.github.skydoves:androidribbon:1.0.4"
+
+    //navigation
+    def nav_version = "2.5.3"
+    implementation "androidx.navigation:navigation-fragment:$nav_version"
+    implementation "androidx.navigation:navigation-ui:$nav_version"
 
 }

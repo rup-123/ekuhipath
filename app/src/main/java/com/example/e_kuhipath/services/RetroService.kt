@@ -57,4 +57,14 @@ interface RetroService {
     fun getUnpaidCourseDetails(
         @Path(value = "id", encoded = true)courseid:String, @Header("Authorization") accesstoken: String
     ): Call<UnpaidCourseDetailsReturn>
+
+    @GET("video-course/get-paid-courses")
+    suspend fun getPaidCourses(@Header("Authorization") accesstoken: String): Response<PaidCourses>
+
+    @GET("video-course/get-paid-course-details/{id}")
+    suspend fun getPaidCourseDetails(@Path(value = "id", encoded = true)subcourseid:String,@Header("Authorization") accesstoken: String): Response<PaidCourseDetails>
+
+    @GET("video-course/get-video-details/{id}")
+    suspend fun getVideoDetails(@Path(value = "id", encoded = true)videoid:String,@Header("Authorization") accesstoken: String): Response<PaidCourseVideoDetails>
+
 }
