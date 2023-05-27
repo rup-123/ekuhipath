@@ -21,6 +21,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.e_kuhipath.R
 import com.example.e_kuhipath.activities.adapters.UnpaidCourseAdapter
+import com.example.e_kuhipath.activities.authentication.LoginActivity
+import com.example.e_kuhipath.activities.common.BottomNavActivity
 import com.example.e_kuhipath.activities.landingpage.WelcomeActivity
 import com.example.e_kuhipath.models.UnpaidCourseReturn
 import com.example.e_kuhipath.services.RetroService
@@ -138,6 +140,14 @@ class UnpaidCoursesActivity: AppCompatActivity() {
                                                 message,
                                                 Toast.LENGTH_SHORT
                                             ).show()
+                                            val editor = sharedPref.edit()
+                                            editor.putString("accesstoken", null)
+                                            editor.apply()
+                                            val intent = Intent(
+                                                context,
+                                                LoginActivity::class.java
+                                            )
+                                            context.startActivity(intent)
                                             //  edittext.requestFocus()
                                             //  awesomeValidation.addValidation(dialog,R.id.complainuniqueid, "^[A-Za-z\\s]{1,}[\\.]{0,1}[A-Za-z\\s]{0,}$", message)
                                             //   awesomeValidation.addValidation(uniqueid,"^[A-Za-z\\s]{1,}[\\.]{0,1}[A-Za-z\\s]{0,}$", message)
@@ -174,6 +184,17 @@ class UnpaidCoursesActivity: AppCompatActivity() {
                 startActivity(intent)
             }
         }
+
+        val home = findViewById<View>(R.id.home)
+        val purchases = findViewById<View>(R.id.purchases)
+        val downloads = findViewById<View>(R.id.downloads)
+        val help = findViewById<View>(R.id.help)
+
+
+        home.setOnClickListener(BottomNavActivity(this))
+        purchases.setOnClickListener(BottomNavActivity(this))
+        downloads.setOnClickListener(BottomNavActivity(this))
+        help.setOnClickListener(BottomNavActivity(this))
 
     }
 

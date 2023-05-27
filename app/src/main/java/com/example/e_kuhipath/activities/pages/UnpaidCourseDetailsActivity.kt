@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.e_kuhipath.R
 import com.example.e_kuhipath.activities.adapters.UnpaidCourseSubjectsAdapter
+import com.example.e_kuhipath.activities.authentication.LoginActivity
 import com.example.e_kuhipath.models.UnpaidCourseDetailsReturn
 import com.example.e_kuhipath.services.RetroService
 import com.example.e_kuhipath.services.ServiceBuilder
@@ -116,6 +117,14 @@ class UnpaidCourseDetailsActivity: AppCompatActivity() {
                                             message,
                                             Toast.LENGTH_SHORT
                                         ).show()
+                                        val editor = sharedPref.edit()
+                                        editor.putString("accesstoken", null)
+                                        editor.apply()
+                                        val intent = Intent(
+                                            context,
+                                            LoginActivity::class.java
+                                        )
+                                        context.startActivity(intent)
                                         //  edittext.requestFocus()
                                         //  awesomeValidation.addValidation(dialog,R.id.complainuniqueid, "^[A-Za-z\\s]{1,}[\\.]{0,1}[A-Za-z\\s]{0,}$", message)
                                         //   awesomeValidation.addValidation(uniqueid,"^[A-Za-z\\s]{1,}[\\.]{0,1}[A-Za-z\\s]{0,}$", message)

@@ -2,6 +2,7 @@ package com.example.e_kuhipath.activities.pages
 
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
 import android.content.IntentFilter
 import android.content.SharedPreferences
 import android.net.ConnectivityManager
@@ -19,13 +20,17 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.e_kuhipath.R
 import com.example.e_kuhipath.activities.adapters.PaidCoursesAdapter
 import com.example.e_kuhipath.activities.adapters.ParentPaidCourseAdapter
+import com.example.e_kuhipath.activities.authentication.LoginActivity
 import com.example.e_kuhipath.databinding.ActivityPaidCoursedetailsBinding
 import com.example.e_kuhipath.fragments.VideoDialogFragment
 import com.example.e_kuhipath.models.PaidCourseDetails
+import com.example.e_kuhipath.models.PaidCourses
+import com.example.e_kuhipath.models.UnpaidCourseReturn
 import com.example.e_kuhipath.services.RetroService
 import com.example.e_kuhipath.services.ServiceBuilder
 import com.example.e_kuhipath.utils.IsOnline
 import com.example.e_kuhipath.utils.NetworkChangeReceiver
+import kotlinx.android.synthetic.main.activity_paid_coursedetails.*
 import kotlinx.android.synthetic.main.fragment_paid_courses.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -33,6 +38,10 @@ import org.json.JSONObject
 import retrofit2.HttpException
 import java.lang.Exception
 
+
+object GlobalPaidCourseDetails {
+    var paidCourseDetails: PaidCourseDetails? = null
+}
 class PaidCourseDetailsActivity: AppCompatActivity(), NetworkChangeReceiver.NetworkChangeListener {
     private var PRIVATE_MODE = 0
     lateinit var sharedPref: SharedPreferences
@@ -42,6 +51,8 @@ class PaidCourseDetailsActivity: AppCompatActivity(), NetworkChangeReceiver.Netw
     private lateinit var binding: ActivityPaidCoursedetailsBinding
     private lateinit var receiver: NetworkChangeReceiver
     var subcourseid:String? = null
+    var videos:String? = null
+
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,12 +60,18 @@ class PaidCourseDetailsActivity: AppCompatActivity(), NetworkChangeReceiver.Netw
         binding = ActivityPaidCoursedetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
         subcourseid = intent.getStringExtra("subcourseid")
-        val videos = intent.getStringExtra("totalvideos")
+        videos = intent.getStringExtra("totalvideos")
         binding.textView7.text = "Total "+videos + " lectures"
         Log.i("zz","subcourseid--->"+subcourseid)
         receiver = NetworkChangeReceiver()
         receiver.listener = this
 
+        paid_backbtn.setOnClickListener{
+            GlobalPaidCourseDetails.paidCourseDetails = null
+
+            val intent = Intent(this,PaidCoursesActivity::class.java)
+            startActivity(intent)
+        }
         Log.i("zz","oncreate---->")
     }
 
@@ -67,6 +84,11 @@ class PaidCourseDetailsActivity: AppCompatActivity(), NetworkChangeReceiver.Netw
 
     }
 
+    override fun onBackPressed() {
+        GlobalPaidCourseDetails.paidCourseDetails = null
+        val intent = Intent(this,PaidCoursesActivity::class.java)
+        startActivity(intent)
+    }
     override fun onPause() {
         super.onPause()
         Log.i("zz","onPause---->")
@@ -98,69 +120,85 @@ class PaidCourseDetailsActivity: AppCompatActivity(), NetworkChangeReceiver.Netw
             val retroService1: RetroService = ServiceBuilder.buildService(
                 RetroService::class.java
             )
-            lifecycleScope.launch {
+            if (GlobalPaidCourseDetails.paidCourseDetails!=null){
+                setUpUI(GlobalPaidCourseDetails.paidCourseDetails!!)
+            }
+            else{
+                lifecycleScope.launch {
 
-                try {
-                    showProgressDialog()
-                    Log.i("ss","paid frag---->")
-                    val response = retroService1.getPaidCourseDetails(subcourseid!!,final_token)
+                    try {
+                        showProgressDialog()
+                        Log.i("ss","paid frag---->")
+                        val response = retroService1.getPaidCourseDetails(subcourseid!!,final_token)
 
-                    if (response.isSuccessful) {
-                        val code = response.body()
-                        if (code == null) {
-                            Toast.makeText(
-                                context,
-                                "Response Body is empty",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        } else {
-                            dialog.hide()
-                            if (code.data.chapters.isEmpty()){
-                                binding.noPaidcoursesLl.visibility = View.VISIBLE
-                                binding.paidcoursedetailsParentRecyclerView.visibility = View.GONE
-                            }
-                            else {
-                                binding.noPaidcoursesLl.visibility = View.GONE
-                                binding.paidcoursedetailsParentRecyclerView.visibility = View.VISIBLE
-                                setUpUI(code)
-                            }
-                        }
-                    }
-                    else {
-                        dialog.hide()
-                        if (response.code() == 401) {
-                            val b = JSONObject(response.errorBody()!!.string())
-
-                            if (b.has("message")) {
-                                val message = b.get("message").toString()
-                                Log.i("zzg", "message---->" + message)
-
+                        if (response.isSuccessful) {
+                            val code = response.body()
+                            if (code == null) {
                                 Toast.makeText(
-                                    this@PaidCourseDetailsActivity,
-                                    message,
+                                    context,
+                                    "Response Body is empty",
                                     Toast.LENGTH_SHORT
                                 ).show()
-                                //  edittext.requestFocus()
-                                //  awesomeValidation.addValidation(dialog,R.id.complainuniqueid, "^[A-Za-z\\s]{1,}[\\.]{0,1}[A-Za-z\\s]{0,}$", message)
-                                //   awesomeValidation.addValidation(uniqueid,"^[A-Za-z\\s]{1,}[\\.]{0,1}[A-Za-z\\s]{0,}$", message)
+                            } else {
+                                dialog.hide()
+                                GlobalPaidCourseDetails.paidCourseDetails = code
+                                if (code.data.chapters.isEmpty()){
+                                    binding.noPaidcoursesLl.visibility = View.VISIBLE
+                                    binding.paidcoursedetailsParentRecyclerView.visibility = View.GONE
+                                }
+                                else {
+                                    binding.noPaidcoursesLl.visibility = View.GONE
+                                    binding.paidcoursedetailsParentRecyclerView.visibility = View.VISIBLE
+                                    setUpUI(code)
+                                }
+                            }
+                        }
+                        else {
+                            dialog.hide()
+                            if (response.code() == 401) {
+                                val b = JSONObject(response.errorBody()!!.string())
 
+                                if (b.has("message")) {
+                                    val message = b.get("message").toString()
+                                    Log.i("zzg", "message---->" + message)
+
+                                    Toast.makeText(
+                                        this@PaidCourseDetailsActivity,
+                                        message,
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                    val editor = sharedPref.edit()
+                                    editor.putString("accesstoken", null)
+                                    editor.apply()
+
+                                    val intent = Intent(
+                                        context,
+                                        LoginActivity::class.java
+                                    )
+                                    context.startActivity(intent)
+                                    //  edittext.requestFocus()
+                                    //  awesomeValidation.addValidation(dialog,R.id.complainuniqueid, "^[A-Za-z\\s]{1,}[\\.]{0,1}[A-Za-z\\s]{0,}$", message)
+                                    //   awesomeValidation.addValidation(uniqueid,"^[A-Za-z\\s]{1,}[\\.]{0,1}[A-Za-z\\s]{0,}$", message)
+
+                                }
+                            }
+                            else if (response.code() == 400){
+                                val jObjError = JSONObject(response.errorBody()!!.string())
+                                if (jObjError.has("message")){
+                                    val message = jObjError.get("message").toString()
+                                    Toast.makeText(context,message, Toast.LENGTH_LONG).show()
+                                }
                             }
                         }
-                        else if (response.code() == 400){
-                            val jObjError = JSONObject(response.errorBody()!!.string())
-                            if (jObjError.has("message")){
-                                val message = jObjError.get("message").toString()
-                                Toast.makeText(context,message, Toast.LENGTH_LONG).show()
-                            }
-                        }
+
+                    } catch (e: HttpException) {
+                        Log.i("xxx", "httpexception--->" + e)
+                    } catch (e: Exception) {
+                        Log.i("xxx", "other exception--->" + e)
                     }
-
-                } catch (e: HttpException) {
-                    Log.i("xxx", "httpexception--->" + e)
-                } catch (e: Exception) {
-                    Log.i("xxx", "other exception--->" + e)
+                    Log.i("zz", "outside on response teacher profile online true---->")
                 }
-                Log.i("zz", "outside on response teacher profile online true---->")
+
             }
         } else {
             // Show a message to the user that there is no internet connectivity
@@ -216,13 +254,22 @@ class PaidCourseDetailsActivity: AppCompatActivity(), NetworkChangeReceiver.Netw
                             }
                             else {
                                 val videoUrl = "https://www.ekuhipath.com/api/ekuhipath-v1/video-course/watch/$subcourseid/$videoid/${code.data.video_details.main_video_name}"
-                                val dialogFragment = VideoDialogFragment()
+                                /*val dialogFragment = VideoDialogFragment()
                                 val args = Bundle()
                                 args.putString("video_url", videoUrl)
                                 args.putString("video_thumbnail", video_thumbnail)
                                 args.putString("videoname",videoname)
                                 dialogFragment.arguments = args
-                                dialogFragment.show(supportFragmentManager, "VideoDialogFragment")
+                                dialogFragment.show(supportFragmentManager, "VideoDialogFragment")*/
+                                val intent = Intent(this@PaidCourseDetailsActivity,VideoPlayerActivity::class.java)
+                                intent.putExtra("video_url",videoUrl)
+                                intent.putExtra("video_thumbnail",video_thumbnail)
+                                intent.putExtra("videoname",videoname)
+                                intent.putExtra("videoid",videoid)
+
+                                intent.putExtra("subcourseid",subcourseid)
+                                intent.putExtra("totalvideos",videos)
+                                startActivity(intent)
                             }
                         }
                     }
@@ -240,6 +287,14 @@ class PaidCourseDetailsActivity: AppCompatActivity(), NetworkChangeReceiver.Netw
                                     message,
                                     Toast.LENGTH_SHORT
                                 ).show()
+                                val editor = sharedPref.edit()
+                                editor.putString("accesstoken", null)
+                                editor.apply()
+                                val intent = Intent(
+                                    this@PaidCourseDetailsActivity,
+                                    LoginActivity::class.java
+                                )
+                                startActivity(intent)
                                 //  edittext.requestFocus()
                                 //  awesomeValidation.addValidation(dialog,R.id.complainuniqueid, "^[A-Za-z\\s]{1,}[\\.]{0,1}[A-Za-z\\s]{0,}$", message)
                                 //   awesomeValidation.addValidation(uniqueid,"^[A-Za-z\\s]{1,}[\\.]{0,1}[A-Za-z\\s]{0,}$", message)

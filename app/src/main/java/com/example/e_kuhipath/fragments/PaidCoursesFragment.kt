@@ -1,6 +1,7 @@
 package com.example.e_kuhipath.fragments
 
 import android.app.Dialog
+import android.content.Intent
 import android.content.IntentFilter
 import android.content.SharedPreferences
 import android.net.ConnectivityManager
@@ -14,6 +15,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.e_kuhipath.R
 import com.example.e_kuhipath.activities.adapters.PaidCoursesAdapter
+import com.example.e_kuhipath.activities.authentication.LoginActivity
+import com.example.e_kuhipath.activities.pages.GlobalPaidCourseDetails
+import com.example.e_kuhipath.models.PaidCourseDetails
 import com.example.e_kuhipath.models.PaidCourses
 import com.example.e_kuhipath.services.RetroService
 import com.example.e_kuhipath.services.ServiceBuilder
@@ -24,6 +28,10 @@ import org.json.JSONObject
 import retrofit2.HttpException
 import java.lang.Exception
 
+
+object GlobalPaidCourse {
+    var paidCourses: PaidCourses? = null
+}
 class PaidCoursesFragment() : Fragment(R.layout.fragment_paid_courses), NetworkChangeReceiver.NetworkChangeListener {
     private var PRIVATE_MODE = 0
     lateinit var sharedPref: SharedPreferences
@@ -77,72 +85,86 @@ class PaidCoursesFragment() : Fragment(R.layout.fragment_paid_courses), NetworkC
             val accesstoken = sharedPref.getString("accesstoken", "")
             val final_token = "Bearer " + accesstoken
 
+
             val retroService1: RetroService = ServiceBuilder.buildService(
                 RetroService::class.java
             )
-            lifecycleScope.launch {
+            if (GlobalPaidCourse.paidCourses!=null){
+                setUpUI(GlobalPaidCourse.paidCourses!!)
+            }
+            else{
+                lifecycleScope.launch {
 
-                try {
-                    showProgressDialog()
-                    Log.i("ss","paid frag---->")
-                    val response = retroService1.getPaidCourses(final_token)
+                    try {
+                        showProgressDialog()
+                        Log.i("ss","paid frag---->")
+                        val response = retroService1.getPaidCourses(final_token)
 
-                    if (response.isSuccessful) {
-                        val code = response.body()
-                        if (code == null) {
-                            Toast.makeText(
-                                context,
-                                "Response Body is empty",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        } else {
-                            dialog.hide()
-                            if (code.data.paidCourse.isEmpty()){
-                                no_courses_ll.visibility = View.VISIBLE
-                                paidcourses_recycler_view.visibility = View.GONE
-                            }
-                            else {
-                                no_courses_ll.visibility = View.GONE
-                                paidcourses_recycler_view.visibility = View.VISIBLE
-                                setUpUI(code)
-                            }
-                        }
-                    }
-                    else {
-                        dialog.hide()
-                        if (response.code() == 401) {
-                            val b = JSONObject(response.errorBody()!!.string())
-
-                            if (b.has("message")) {
-                                val message = b.get("message").toString()
-                                Log.i("zzg", "message---->" + message)
-
+                        if (response.isSuccessful) {
+                            val code = response.body()
+                            if (code == null) {
                                 Toast.makeText(
-                                    requireActivity(),
-                                    message,
+                                    context,
+                                    "Response Body is empty",
                                     Toast.LENGTH_SHORT
                                 ).show()
-                                //  edittext.requestFocus()
-                                //  awesomeValidation.addValidation(dialog,R.id.complainuniqueid, "^[A-Za-z\\s]{1,}[\\.]{0,1}[A-Za-z\\s]{0,}$", message)
-                                //   awesomeValidation.addValidation(uniqueid,"^[A-Za-z\\s]{1,}[\\.]{0,1}[A-Za-z\\s]{0,}$", message)
+                            } else {
+                                dialog.hide()
+                                GlobalPaidCourse.paidCourses = code
+                                if (code.data.paidCourse.isEmpty()){
+                                    no_courses_ll.visibility = View.VISIBLE
+                                    paidcourses_recycler_view.visibility = View.GONE
+                                }
+                                else {
+                                    no_courses_ll.visibility = View.GONE
+                                    paidcourses_recycler_view.visibility = View.VISIBLE
+                                    setUpUI(code)
+                                }
+                            }
+                        }
+                        else {
+                            dialog.hide()
+                            if (response.code() == 401) {
+                                val b = JSONObject(response.errorBody()!!.string())
 
+                                if (b.has("message")) {
+                                    val message = b.get("message").toString()
+                                    Log.i("zzg", "message---->" + message)
+
+                                    Toast.makeText(
+                                        requireActivity(),
+                                        message,
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+
+                                    val editor = sharedPref.edit()
+                                    editor.putString("accesstoken", null)
+                                    editor.apply()
+                                    val intent = Intent(requireContext(), LoginActivity::class.java)
+                                    requireActivity().startActivity(intent)
+                                    //  edittext.requestFocus()
+                                    //  awesomeValidation.addValidation(dialog,R.id.complainuniqueid, "^[A-Za-z\\s]{1,}[\\.]{0,1}[A-Za-z\\s]{0,}$", message)
+                                    //   awesomeValidation.addValidation(uniqueid,"^[A-Za-z\\s]{1,}[\\.]{0,1}[A-Za-z\\s]{0,}$", message)
+
+                                }
+                            }
+                            else if (response.code() == 400){
+                                val jObjError = JSONObject(response.errorBody()!!.string())
+                                if (jObjError.has("message")){
+                                    val message = jObjError.get("message").toString()
+                                    Toast.makeText(context,message, Toast.LENGTH_LONG).show()
+                                }
                             }
                         }
-                        else if (response.code() == 400){
-                            val jObjError = JSONObject(response.errorBody()!!.string())
-                            if (jObjError.has("message")){
-                                val message = jObjError.get("message").toString()
-                                Toast.makeText(context,message, Toast.LENGTH_LONG).show()
-                            }
-                        }
+
+                    } catch (e: HttpException) {
+                        Log.i("xxx", "httpexception--->" + e)
+                    } catch (e: Exception) {
+                        Log.i("xxx", "other exception--->" + e)
                     }
-
-                } catch (e: HttpException) {
-                    Log.i("xxx", "httpexception--->" + e)
-                } catch (e: Exception) {
-                    Log.i("xxx", "other exception--->" + e)
+                    Log.i("zz", "outside on response teacher profile online true---->")
                 }
-                Log.i("zz", "outside on response teacher profile online true---->")
+
             }
         } else {
             // Show a message to the user that there is no internet connectivity

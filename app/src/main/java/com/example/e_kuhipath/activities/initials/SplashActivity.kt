@@ -15,16 +15,22 @@ import com.example.e_kuhipath.MainActivity
 import com.example.e_kuhipath.R
 import com.example.e_kuhipath.activities.authentication.LoginActivity
 import com.example.e_kuhipath.activities.landingpage.WelcomeActivity
+import com.google.android.play.core.appupdate.AppUpdateManager
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 
 class SplashActivity: AppCompatActivity() {
     private var PRIVATE_MODE = 0
     lateinit var sharedPref: SharedPreferences
+    private lateinit var appUpdateManager: AppUpdateManager
+    private val MY_UPDATE_REQUEST_CODE = 100
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
         Log.i("vvv", "splash--->")
+
+        appUpdateManager = AppUpdateManagerFactory.create(this)
 
         window.setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,

@@ -22,7 +22,6 @@ class PaidCoursesAdapter(var paidCourses: PaidCourses, var context: Context): Re
         val paidcourse_lang = v.findViewById<TextView>(R.id.paidcourse_lang)
         val lectures = v.findViewById<TextView>(R.id.lectures)
         val duration = v.findViewById<TextView>(R.id.duration)
-        val subs_duration = v.findViewById<TextView>(R.id.subs_duration)
 
         val image = v.findViewById<ImageView>(R.id.paidcourse_img)
 
@@ -48,7 +47,6 @@ class PaidCoursesAdapter(var paidCourses: PaidCourses, var context: Context): Re
 
         holder.lectures.text = "Lectures: "+paidCourses.data.paidCourse[position].total_videos + " lectures"
         holder.duration.text = "Duration: "+paidCourses.data.paidCourse[position].video_duration + " hours"
-        holder.subs_duration.text = "Subscription Duration: " +paidCourses.data.paidCourse[position].course_duration + " Months"
 
 
         holder.paidcoursecard.setOnClickListener{

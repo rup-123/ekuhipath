@@ -32,7 +32,7 @@
             android:layout_marginTop="60dp"
             android:layout_marginHorizontal="20dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/coaching_bg"
+            android:src="@drawable/ekuhipath_team_banner_1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linlayoutstudentprofile" />
@@ -344,17 +344,11 @@
                 android:paddingBottom="10dp"
                 android:layout_gravity="end"
                 android:gravity="end"
+                android:text="eKuhipath-1.0"
+                android:fontFamily="@font/nunito_bold"
                 android:textColor="@color/black"
                 android:textSize="15sp" />
 
-            <TextView
-                android:id="@+id/studentdashboard_devicename"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:paddingBottom="10dp"
-                android:textColor="@color/black"
-                android:textSize="12sp" />
         </LinearLayout>
     </com.google.android.material.navigation.NavigationView>
 </androidx.drawerlayout.widget.DrawerLayout>
