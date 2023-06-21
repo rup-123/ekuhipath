@@ -28,6 +28,5 @@
         android:fontFamily="@font/nunito_semibold"
         app:layout_constraintStart_toEndOf="@+id/imageView3"
         app:layout_constraintTop_toTopOf="parent"
-        android:maxWidth="260dp"
-        app:layout_wrapBehavior="wrap"/>
+        android:maxWidth="260dp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
