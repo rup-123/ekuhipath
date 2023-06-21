@@ -1,6 +1,7 @@
 package com.example.e_kuhipath.activities.initials
 
 import android.content.Intent
+import android.content.IntentSender
 import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
@@ -17,12 +18,15 @@ import com.example.e_kuhipath.activities.authentication.LoginActivity
 import com.example.e_kuhipath.activities.landingpage.WelcomeActivity
 import com.google.android.play.core.appupdate.AppUpdateManager
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.install.model.ActivityResult.RESULT_IN_APP_UPDATE_FAILED
+import com.google.android.play.core.install.model.AppUpdateType
+import com.google.android.play.core.install.model.UpdateAvailability
 
-class SplashActivity: AppCompatActivity() {
+class SplashActivity : AppCompatActivity() {
     private var PRIVATE_MODE = 0
-    lateinit var sharedPref: SharedPreferences
+    private lateinit var sharedPref: SharedPreferences
     private lateinit var appUpdateManager: AppUpdateManager
-    private val MY_UPDATE_REQUEST_CODE = 100
+    private val REQUEST_CODE = 101
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,35 +41,98 @@ class SplashActivity: AppCompatActivity() {
             WindowManager.LayoutParams.FLAG_FULLSCREEN
         )
 
-        sharedPref = this.getSharedPreferences("sharedpref", PRIVATE_MODE)
+        checkForAppUpdate()
+    }
 
+    private fun checkForAppUpdate() {
+        val appUpdateInfoTask = appUpdateManager.appUpdateInfo
+        appUpdateInfoTask.addOnSuccessListener { appUpdateInfo ->
+            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE &&
+                appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)
+            ) {
+                // Request the update
+                try {
+                    appUpdateManager.startUpdateFlowForResult(
+                        appUpdateInfo,
+                        AppUpdateType.IMMEDIATE,
+                        this,
+                        REQUEST_CODE
+                    )
+                } catch (e: IntentSender.SendIntentException) {
+                    e.printStackTrace()
+                }
+            } else {
+                // No update available, proceed to Login or Welcome activity
+                proceedToNextActivity()
+            }
+        }
+    }
+
+    private fun proceedToNextActivity() {
+        sharedPref = this.getSharedPreferences("sharedpref", PRIVATE_MODE)
         if (!sharedPref.contains("switch")) {
             val editor = sharedPref.edit()
             editor.putString("switch", "0")
             editor.apply()
         }
 
-        // HERE WE ARE TAKING THE REFERENCE OF OUR IMAGE
-        // SO THAT WE CAN PERFORM ANIMATION USING THAT IMAGE
-        val backgroundImage = findViewById<ImageView>(R.id.SplashScreenImage)
-        val slideAnimation = AnimationUtils.loadAnimation(this, R.anim.top_slide)
-        backgroundImage.startAnimation(slideAnimation)
+        val switch = sharedPref.getString("switch", "0")
+        Log.i("vvv", "switch--->" + switch)
+        if (switch == "0") {
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+        } else if (switch == "1") {
+            val intent = Intent(this, WelcomeActivity::class.java)
+            startActivity(intent)
+        }
+        finish()
+    }
 
-        // we used the postDelayed(Runnable, time) method
-        // to send a message with a delayed time.
-        Handler().postDelayed({
-            val switch = sharedPref.getString("switch", "0")
-            Log.i("vvv", "switch--->"+switch)
-            if(switch == "0"){
-                val intent = Intent(this, LoginActivity::class.java)
-                startActivity(intent)
-                finish()
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_CODE) {
+            when (resultCode) {
+                RESULT_OK -> {
+                    // Update successful, proceed to Login or Welcome activity
+                    proceedToNextActivity()
+                }
+                RESULT_CANCELED -> {
+                    // Update canceled by the user, exit from the app
+                    finish()
+                }
+                RESULT_IN_APP_UPDATE_FAILED -> {
+                    // Update failed, general error
+                }
             }
-            else if (switch == "1"){
-                val intent = Intent(this, WelcomeActivity::class.java)
-                startActivity(intent)
-                finish()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // Check if the update is still in progress
+        appUpdateManager.appUpdateInfo.addOnSuccessListener { appUpdateInfo ->
+            if (appUpdateInfo.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS) {
+                // Resume the update
+                try {
+                    appUpdateManager.startUpdateFlowForResult(
+                        appUpdateInfo,
+                        AppUpdateType.IMMEDIATE,
+                        this,
+                        REQUEST_CODE
+                    )
+                } catch (e: IntentSender.SendIntentException) {
+                    e.printStackTrace()
+                }
+            } else {
+                // Update not in progress, proceed to Login or Welcome activity
+                proceedToNextActivity()
             }
-        }, 3000) // 3000 is the delayed time in milliseconds.
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        // Dispose the update manager
+        appUpdateManager.unregisterListener { }
     }
 }

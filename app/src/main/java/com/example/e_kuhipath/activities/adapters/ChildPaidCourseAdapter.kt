@@ -13,7 +13,7 @@ import com.example.e_kuhipath.models.PaidCourseVideos
 class ChildPaidCourseAdapter(
     var videos: List<PaidCourseVideos>,
     var context: Context,
-    private val onVideoClick: (String,String) -> Unit
+    private val onVideoClick: (String,String,String) -> Unit
 ) :
     RecyclerView.Adapter<ChildPaidCourseAdapter.DataViewHolder>() {
     private var PRIVATE_MODE = 0
@@ -37,7 +37,7 @@ class ChildPaidCourseAdapter(
         val final_token = "Bearer " + accesstoken
 
         holder.paidcourse_videocard.setOnClickListener{
-            onVideoClick(videos[position].video_id,videos[position].video_title)
+            onVideoClick(videos[position].video_id,videos[position].video_title,videos[position].pdf_path)
         }
     }
 

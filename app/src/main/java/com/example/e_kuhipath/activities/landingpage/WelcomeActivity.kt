@@ -42,7 +42,7 @@ class WelcomeActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_welcome)
-
+        val appVersion = findViewById<TextView>(R.id.appVersion_welcome)
 
         val toolbarsd = findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbarsd)
         setSupportActionBar(toolbarsd)
@@ -51,6 +51,11 @@ class WelcomeActivity: AppCompatActivity() {
         toolbarsd.subtitle = ""
 
 
+        val packageInfo = packageManager.getPackageInfo(packageName, 0)
+        val currentVersionName = packageInfo.versionName
+
+        // Display the current version name in a TextView
+        appVersion.text = "eKuhipath-$currentVersionName"
 
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout_sd)
         val navview: NavigationView = findViewById(R.id.nav_view_student)

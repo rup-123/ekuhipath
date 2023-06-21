@@ -16,6 +16,8 @@ data class VideoInfo(
     val main_video_name: String,
     @SerializedName("duration_hours")
     val duration_hours: String,
+    @SerializedName("pdf_path")
+    val pdf_path: String,
     @SerializedName("duration_minutes")
     val duration_minutes: String
 ): Parcelable

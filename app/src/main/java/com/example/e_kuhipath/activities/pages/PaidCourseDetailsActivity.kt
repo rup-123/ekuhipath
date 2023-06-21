@@ -208,12 +208,12 @@ class PaidCourseDetailsActivity: AppCompatActivity(), NetworkChangeReceiver.Netw
 
     private fun setUpUI(code: PaidCourseDetails) {
         binding.paidcoursedetailsParentRecyclerView.layoutManager = LinearLayoutManager(this)
-        val paidCoursesAdapter = ParentPaidCourseAdapter(code,this){ videoid,videoname -> playVideo(videoid,videoname) }
+        val paidCoursesAdapter = ParentPaidCourseAdapter(code,this){ videoid,videoname,pdfpath -> playVideo(videoid,videoname,pdfpath) }
 
         binding.paidcoursedetailsParentRecyclerView.adapter = paidCoursesAdapter
     }
 
-    private fun playVideo(videoid: String,videoname:String) {
+    private fun playVideo(videoid: String,videoname:String,pdfpath:String) {
         // implement video playback logic
 
         val video_thumbnail = "https://www.ekuhipath.com/api/ekuhipath-v1/video-course/get-video-thumbnail/" +  videoid
@@ -266,6 +266,7 @@ class PaidCourseDetailsActivity: AppCompatActivity(), NetworkChangeReceiver.Netw
                                 intent.putExtra("video_thumbnail",video_thumbnail)
                                 intent.putExtra("videoname",videoname)
                                 intent.putExtra("videoid",videoid)
+                                intent.putExtra("pdfpath",pdfpath)
 
                                 intent.putExtra("subcourseid",subcourseid)
                                 intent.putExtra("totalvideos",videos)

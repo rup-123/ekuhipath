@@ -14,6 +14,8 @@ data class PaidCourseVideos(
     val video_details: String,
     @SerializedName("duration_hours")
     val duration_hours: String,
+    @SerializedName("pdf_path")
+    val pdf_path: String,
     @SerializedName("duration_minutes")
     val duration_minutes: String
 ): Parcelable

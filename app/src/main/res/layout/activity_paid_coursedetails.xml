@@ -98,35 +98,40 @@
 
 
 
-    <LinearLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@+id/ll3" >
+        android:layout_height="match_parent"
+        android:layout_marginTop="50dp"
+        app:layout_constraintTop_toBottomOf="@+id/ll3">
         <LinearLayout
-            android:id="@+id/no_paidcourses_ll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:gravity="center"
-            android:orientation="vertical">
-            <ImageView
-                android:layout_width="200dp"
-                android:layout_height="200dp"
-                android:src="@drawable/no_content"/>
-            <TextView
-                android:layout_width="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@+id/ll3" >
+            <LinearLayout
+                android:id="@+id/no_paidcourses_ll"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="No activities available"
-                android:fontFamily="@font/nunito_bold"/>
-        </LinearLayout>
+                android:visibility="gone"
+                android:gravity="center"
+                android:orientation="vertical">
+                <ImageView
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    android:src="@drawable/no_content"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="No activities available"
+                    android:fontFamily="@font/nunito_bold"/>
+            </LinearLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/paidcoursedetails_parent_recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="750dp"
-            android:layout_marginTop="5dp"
-            tools:context="com.example.infotuteandroidv1.activities.parents_students.calendar.SchoolCalendarActivity"
-            tools:listitem="@layout/parentpaidcoursecarditem"/>
-    </LinearLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/paidcoursedetails_parent_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:context="com.example.infotuteandroidv1.activities.parents_students.calendar.SchoolCalendarActivity"
+                tools:listitem="@layout/parentpaidcoursecarditem"/>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

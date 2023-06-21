@@ -66,6 +66,7 @@ class VideoPlayerActivity: AppCompatActivity(), AudioManager.OnAudioFocusChangeL
     private var subcourseid: String? = null
     private var videos: String? = null
     private var videoid: String? = null
+    private var pdfpath: String? = null
 
     private var playbackPosition: Long = 0
 
@@ -188,6 +189,7 @@ class VideoPlayerActivity: AppCompatActivity(), AudioManager.OnAudioFocusChangeL
         subcourseid = intent.getStringExtra("subcourseid")
         videos = intent.getStringExtra("totalvideos")
         videoid = intent.getStringExtra("videoid")
+        pdfpath = intent.getStringExtra("pdfpath")
 
 
         Log.i("zz","videourl--->"+videoUrl)
@@ -305,7 +307,9 @@ class VideoPlayerActivity: AppCompatActivity(), AudioManager.OnAudioFocusChangeL
                 else playVideo()
             }
         }
-
+        if (pdfpath.isNullOrEmpty()){
+            download_pdf.visibility = View.GONE
+        }
         download_pdf.setOnClickListener {
                 Toast.makeText(this,"Downloading...",Toast.LENGTH_LONG).show()
                 val video_pdf = "https://www.ekuhipath.com/api/ekuhipath-v1/video-course/get-video-pdf/" +  videoid
