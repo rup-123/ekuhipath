@@ -37,7 +37,11 @@ class ChildPaidCourseAdapter(
         val final_token = "Bearer " + accesstoken
 
         holder.paidcourse_videocard.setOnClickListener{
-            onVideoClick(videos[position].video_id,videos[position].video_title,videos[position].pdf_path)
+            videos[position].pdf_path?.let { it1 ->
+                onVideoClick(videos[position].video_id,videos[position].video_title,
+                    it1
+                )
+            }
         }
     }
 
