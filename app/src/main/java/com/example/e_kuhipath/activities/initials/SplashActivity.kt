@@ -41,10 +41,21 @@ class SplashActivity : AppCompatActivity() {
             WindowManager.LayoutParams.FLAG_FULLSCREEN
         )
 
-        checkForAppUpdate()
+        /*checkForAppUpdate()*/
+
+        animation()
+        proceedToNextActivity()
+    }
+
+    private fun animation() {
+        val backgroundImage = findViewById<ImageView>(R.id.SplashScreenImage)
+        val slideAnimation = AnimationUtils.loadAnimation(this, R.anim.top_slide)
+        backgroundImage.startAnimation(slideAnimation)
     }
 
     private fun checkForAppUpdate() {
+        Log.i("vvv", "proceedToNextActivity00--->")
+
         val appUpdateInfoTask = appUpdateManager.appUpdateInfo
         appUpdateInfoTask.addOnSuccessListener { appUpdateInfo ->
             if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE &&
@@ -63,6 +74,7 @@ class SplashActivity : AppCompatActivity() {
                 }
             } else {
                 // No update available, proceed to Login or Welcome activity
+                Log.i("vvv", "proceedToNextActivity0--->")
                 proceedToNextActivity()
             }
         }
@@ -76,7 +88,22 @@ class SplashActivity : AppCompatActivity() {
             editor.apply()
         }
 
-        val switch = sharedPref.getString("switch", "0")
+        Handler().postDelayed({
+            val switch = sharedPref.getString("switch", "0")
+            Log.i("vvv", "switch--->"+switch)
+            if(switch == "0"){
+                val intent = Intent(this, LoginActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
+            else if (switch == "1"){
+                val intent = Intent(this, WelcomeActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
+        }, 3000) // 3000 is the delayed time in milliseconds.
+
+    /*val switch = sharedPref.getString("switch", "0")
         Log.i("vvv", "switch--->" + switch)
         if (switch == "0") {
             val intent = Intent(this, LoginActivity::class.java)
@@ -85,7 +112,7 @@ class SplashActivity : AppCompatActivity() {
             val intent = Intent(this, WelcomeActivity::class.java)
             startActivity(intent)
         }
-        finish()
+        finish()*/
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -110,6 +137,8 @@ class SplashActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         // Check if the update is still in progress
+        Log.i("vvv", "resume--->")
+
         appUpdateManager.appUpdateInfo.addOnSuccessListener { appUpdateInfo ->
             if (appUpdateInfo.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS) {
                 // Resume the update
@@ -125,6 +154,8 @@ class SplashActivity : AppCompatActivity() {
                 }
             } else {
                 // Update not in progress, proceed to Login or Welcome activity
+                Log.i("vvv", "proceedToNextActivity001--->")
+
                 proceedToNextActivity()
             }
         }

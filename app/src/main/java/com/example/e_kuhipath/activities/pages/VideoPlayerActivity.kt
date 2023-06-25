@@ -16,6 +16,7 @@ import android.os.Environment
 import android.util.Log
 import android.util.TypedValue
 import android.view.*
+import android.view.WindowManager.LayoutParams
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -373,6 +374,7 @@ class VideoPlayerActivity: AppCompatActivity(), AudioManager.OnAudioFocusChangeL
         // Attach the player to the PlayerView
 
         playerView.player = player
+        window.addFlags(LayoutParams.FLAG_KEEP_SCREEN_ON)
         playVideo()
 
         playInFullScreen(enable = isFullScreen)
