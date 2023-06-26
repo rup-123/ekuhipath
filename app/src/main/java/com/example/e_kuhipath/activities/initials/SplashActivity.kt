@@ -74,7 +74,7 @@ class SplashActivity : AppCompatActivity() {
                 }
             } else {
                 // No update available, proceed to Login or Welcome activity
-                Log.i("vvv", "proceedToNextActivity0--->")
+               // Log.i("vvv", "proceedToNextActivity0--->")
                 proceedToNextActivity()
             }
         }
