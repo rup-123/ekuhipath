@@ -6,19 +6,19 @@
 
     <fragment
         android:id="@+id/coursesFragment"
-        android:name="com.example.e_kuhipath.fragments.PaidCoursesFragment"
+        android:name="com.e_kuhipath.android.fragments.PaidCoursesFragment"
         android:label="Courses Fragment"
         tools:layout="@layout/fragment_paid_courses" />
 
     <fragment
         android:id="@+id/pdfFragment"
-        android:name="com.example.e_kuhipath.fragments.PdfFragment"
+        android:name="com.e_kuhipath.android.fragments.PdfFragment"
         android:label="PDF Fragment"
         tools:layout="@layout/fragment_pdf" />
 
     <fragment
         android:id="@+id/mockFragment"
-        android:name="com.example.e_kuhipath.fragments.MockFragment"
+        android:name="com.e_kuhipath.android.fragments.MockFragment"
         android:label="Mock Fragment"
         tools:layout="@layout/fragment_mock" />
 

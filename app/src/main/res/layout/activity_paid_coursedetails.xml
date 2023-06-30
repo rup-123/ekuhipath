@@ -130,7 +130,7 @@
                 android:id="@+id/paidcoursedetails_parent_recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                tools:context="com.example.infotuteandroidv1.activities.parents_students.calendar.SchoolCalendarActivity"
+                tools:context="com.e_kuhipath.infotuteandroidv1.activities.parents_students.calendar.SchoolCalendarActivity"
                 tools:listitem="@layout/parentpaidcoursecarditem"/>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.e_kuhipath'
+    namespace 'com.e_kuhipath.android'
     compileSdk 31
 
     defaultConfig {
-        applicationId "com.example.e_kuhipath"
+        applicationId "com.e_kuhipath.android"
         minSdk 21
         targetSdk 31
         versionCode 1
