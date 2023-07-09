@@ -133,6 +133,11 @@ class WelcomeActivity: AppCompatActivity() {
                                                 message,
                                                 Toast.LENGTH_SHORT
                                             ).show()
+                                            val editor = sharedPref.edit()
+                                            editor.putString("accesstoken", null)
+                                            editor.apply()
+                                            val intent = Intent(this@WelcomeActivity, LoginActivity::class.java)
+                                            startActivity(intent)
                                             //  edittext.requestFocus()
                                             //  awesomeValidation.addValidation(dialog,R.id.complainuniqueid, "^[A-Za-z\\s]{1,}[\\.]{0,1}[A-Za-z\\s]{0,}$", message)
                                             //   awesomeValidation.addValidation(uniqueid,"^[A-Za-z\\s]{1,}[\\.]{0,1}[A-Za-z\\s]{0,}$", message)

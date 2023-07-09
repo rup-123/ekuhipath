@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.e_kuhipath.android.R
 import com.e_kuhipath.android.models.PaidCourseDetails
 
-class ParentPaidCourseAdapter(var paidCourseDetails: PaidCourseDetails,var context: Context, private val onVideoClick: (String,String,String) -> Unit): RecyclerView.Adapter<ParentPaidCourseAdapter.DataViewHolder>() {
+class ParentPaidCourseAdapter(var paidCourseDetails: PaidCourseDetails,var context: Context, private val onVideoClick: (String,String,String?) -> Unit): RecyclerView.Adapter<ParentPaidCourseAdapter.DataViewHolder>() {
 
     private var recycledViewPool = RecyclerView.RecycledViewPool()
     inner class DataViewHolder(var v: View) : RecyclerView.ViewHolder(v) {
@@ -31,7 +31,7 @@ class ParentPaidCourseAdapter(var paidCourseDetails: PaidCourseDetails,var conte
         holder.parentpaidcourse_title.text = paidCourseDetails.data.chapters[position].chapter_name
 
 
-        val childPaidCourseAdapter = ChildPaidCourseAdapter(paidCourseDetails.data.chapters[position].videos,context){ videoid,videoname,pdfpath -> onVideoClick(videoid as String,videoname as String,pdfpath as String) }
+        val childPaidCourseAdapter = ChildPaidCourseAdapter(paidCourseDetails.data.chapters[position].videos,context){ videoid,videoname,pdfpath -> onVideoClick(videoid as String,videoname as String,pdfpath as String?) }
 
         holder.childrecyclerview.layoutManager = LinearLayoutManager(context)
         holder.childrecyclerview.adapter = childPaidCourseAdapter

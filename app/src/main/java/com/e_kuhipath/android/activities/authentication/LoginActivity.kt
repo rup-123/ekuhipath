@@ -3,6 +3,7 @@ package com.e_kuhipath.android.activities.authentication
 import android.app.Dialog
 import android.content.Intent
 import android.content.SharedPreferences
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.text.Editable
@@ -41,10 +42,11 @@ class LoginActivity: AppCompatActivity() {
 
         val register = findViewById<TextView>(R.id.register_tv)
         val loginbtn = findViewById<Button>(R.id.login_btn)
+        val forgotpasswrd = findViewById<TextView>(R.id.forgotpassword)
 
         val mobileno = findViewById<TextInputEditText>(R.id.mobileno_et)
         val password = findViewById<TextInputEditText>(R.id.password_et)
-
+        val forgotpasslink = "https://www.app.ekuhipath.com/forgot-password"
         val a = IsOnline()
         val isOnline = a.isOnline(this)
         if (isOnline == false) {
@@ -53,6 +55,14 @@ class LoginActivity: AppCompatActivity() {
         register.setOnClickListener{
             val intent = Intent(this,RegisterActivity::class.java)
             startActivity(intent)
+        }
+        forgotpasswrd.setOnClickListener{
+            try {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(forgotpasslink))
+                startActivity(intent)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
         loginbtn.setOnClickListener{
             val intent = Intent(this,WelcomeActivity::class.java)

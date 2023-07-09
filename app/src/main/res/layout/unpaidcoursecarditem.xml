@@ -33,16 +33,15 @@
 
             <com.skydoves.androidribbon.ShimmerRibbonView
                 android:id="@+id/shimmerview_unpaidcourses"
-                android:layout_width="150dp"
+                android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:alpha="0.8"
                 android:layout_marginTop="10dp"
-                android:layout_marginStart="-70dp"
                 app:shimmer_base_alpha="1.0"
                 app:shimmer_highlight_alpha="0.5"
                 app:shimmer_ribbon_textSize="4dp"
                 app:shimmer_ribbon_textColor="@android:color/white"
-                app:layout_constraintStart_toEndOf="@+id/unpaid_course_name"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:shimmer_ribbon_textStyle="bold"
                 app:shimmer_ribbon_padding_top="3dp"
@@ -64,8 +63,9 @@
                 android:id="@+id/unpaid_course_name"
                 android:layout_width="240dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="28dp"
                 android:layout_marginTop="20dp"
+                android:text="jdksjj kjkjkjkj jkjkjkjkjkjkjkjkjkjk"
+                android:layout_marginStart="40dp"
                 android:fontFamily="@font/nunito_bold"
                 android:textColor="@color/black"
                 android:textSize="16sp"
@@ -76,11 +76,11 @@
                 android:id="@+id/buy_now"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
-                android:background="@drawable/card_bg"
-                android:backgroundTint="#0160AE"
+                android:layout_marginStart="40dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="20dp"
+                android:background="@drawable/card_bg"
+                android:backgroundTint="#0160AE"
                 android:paddingVertical="10dp"
                 android:text="Buy Now"
                 android:textAlignment="center"
@@ -88,17 +88,18 @@
                 android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/imageView"
-                app:layout_constraintTop_toBottomOf="@+id/unpaid_course_name" />
+                app:layout_constraintTop_toBottomOf="@+id/unpaid_course_name"
+                app:layout_constraintVertical_bias="0.0" />
 
             <TextView
                 android:id="@+id/view_details"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:background="@drawable/card_bg"
-                android:backgroundTint="#D21404"
+                android:layout_marginStart="32dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="20dp"
+                android:background="@drawable/card_bg"
+                android:backgroundTint="#D21404"
                 android:paddingVertical="10dp"
                 android:text="View Details"
                 android:textAlignment="center"
@@ -106,7 +107,8 @@
                 android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/buy_now"
-                app:layout_constraintTop_toBottomOf="@+id/unpaid_course_name" />
+                app:layout_constraintTop_toBottomOf="@+id/unpaid_course_name"
+                app:layout_constraintVertical_bias="0.0" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 

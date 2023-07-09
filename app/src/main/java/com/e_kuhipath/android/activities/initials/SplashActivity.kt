@@ -40,10 +40,10 @@ class SplashActivity : AppCompatActivity() {
             WindowManager.LayoutParams.FLAG_FULLSCREEN
         )
 
-       // checkForAppUpdate()
+        checkForAppUpdate()
 
         animation()
-        proceedToNextActivity()
+       // proceedToNextActivity()
     }
 
     private fun animation() {
@@ -133,7 +133,7 @@ class SplashActivity : AppCompatActivity() {
         }
     }
 
-    /*override fun onResume() {
+    override fun onResume() {
         super.onResume()
         // Check if the update is still in progress
         Log.i("vvv", "resume--->")
@@ -158,7 +158,7 @@ class SplashActivity : AppCompatActivity() {
                 proceedToNextActivity()
             }
         }
-    }*/
+    }
 
     override fun onDestroy() {
         super.onDestroy()

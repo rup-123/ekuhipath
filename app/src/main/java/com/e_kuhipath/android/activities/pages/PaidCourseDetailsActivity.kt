@@ -207,7 +207,7 @@ class PaidCourseDetailsActivity: AppCompatActivity(), NetworkChangeReceiver.Netw
         binding.paidcoursedetailsParentRecyclerView.adapter = paidCoursesAdapter
     }
 
-    private fun playVideo(videoid: String,videoname:String,pdfpath:String) {
+    private fun playVideo(videoid: String,videoname:String,pdfpath:String?) {
         // implement video playback logic
 
         val video_thumbnail = "https://www.ekuhipath.com/api/ekuhipath-v1/video-course/get-video-thumbnail/" +  videoid
