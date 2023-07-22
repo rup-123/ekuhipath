@@ -19,6 +19,7 @@ import com.e_kuhipath.android.R
 import com.e_kuhipath.android.activities.authentication.LoginActivity
 import com.e_kuhipath.android.activities.common.BottomNavActivity
 import com.e_kuhipath.android.activities.pages.UnpaidCoursesActivity
+import com.e_kuhipath.android.activities.pages.UnpaidPdfCourseActivity
 import com.e_kuhipath.android.models.StudentLogoutTokens
 import com.e_kuhipath.android.services.RetroService
 import com.e_kuhipath.android.services.ServiceBuilder
@@ -175,11 +176,15 @@ class WelcomeActivity: AppCompatActivity() {
             true
         }
         val onlineclass = findViewById<LinearLayout>(R.id.onlineclass)
+        val pdf = findViewById<LinearLayout>(R.id.pdf)
         onlineclass.setOnClickListener{
             val intent = Intent(this,UnpaidCoursesActivity::class.java)
             startActivity(intent)
         }
-
+        pdf.setOnClickListener{
+            val intent = Intent(this, UnpaidPdfCourseActivity::class.java)
+            startActivity(intent)
+        }
         val home = findViewById<View>(R.id.home)
         val purchases = findViewById<View>(R.id.purchases)
         val downloads = findViewById<View>(R.id.downloads)
