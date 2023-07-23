@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 import android.util.Log
 import android.view.View
 import com.e_kuhipath.android.R
+import com.e_kuhipath.android.activities.landingpage.WelcomeActivity
 import com.e_kuhipath.android.activities.pages.PaidCoursesActivity
 
 class BottomNavActivity(context: Context) : View.OnClickListener{
@@ -23,6 +24,8 @@ class BottomNavActivity(context: Context) : View.OnClickListener{
 
             R.id.home->{
                 Log.i("aa","id--->"+v.id)
+                val intent = Intent(context,WelcomeActivity::class.java)
+                context.startActivity(intent)
                 Log.i("aa","home clicked--->")
             }
 

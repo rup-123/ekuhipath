@@ -76,6 +76,16 @@ class PaidPdfCourseFileAdapter(var paidPdfCourseFile: List<PaidPdfCourseFile>): 
             val mgr = context.getSystemService(AppCompatActivity.DOWNLOAD_SERVICE) as DownloadManager
             try {
                 if (mgr!=null) {
+                    val replacedpdfname = paidPdfCourseFile[position].pdf_name
+                        .replace("/", "-")
+                        .replace("\\", "-")
+                        .replace(":", "-")
+                        .replace("*", "-")
+                        .replace("?", "-")
+                        .replace("<<", "-")
+                        .replace("<", "-")
+                        .replace(">", "-")
+                        .replace("|", "-")
                     val request = DownloadManager.Request(Uri.parse(video_pdf))
                     request.addRequestHeader("Authorization", final_token)
                     request.setMimeType("application/pdf")
@@ -83,7 +93,7 @@ class PaidPdfCourseFileAdapter(var paidPdfCourseFile: List<PaidPdfCourseFile>): 
                     request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_ONLY_COMPLETION)
                     request.setDestinationInExternalPublicDir(
                         Environment.DIRECTORY_DOWNLOADS,
-                        "eKuhipath-${paidPdfCourseFile[position].pdf_name}.pdf"
+                        "eKuhipath-${replacedpdfname}.pdf"
                     )
 
                     mgr.enqueue(request)

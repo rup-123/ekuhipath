@@ -314,7 +314,17 @@ class VideoPlayerActivity: AppCompatActivity(), AudioManager.OnAudioFocusChangeL
         download_pdf.setOnClickListener {
                 Toast.makeText(this,"Downloading...",Toast.LENGTH_LONG).show()
                 val video_pdf = "https://www.ekuhipath.com/api/ekuhipath-v1/video-course/get-video-pdf/" +  videoid
-
+                Log.i("ee","video_pdf--->"+video_pdf)
+            val replacedVideoname = videoname!!
+                .replace("/", "-")
+                .replace("\\", "-")
+                .replace(":", "-")
+                .replace("*", "-")
+                .replace("?", "-")
+                .replace("<<", "-")
+                .replace("<", "-")
+                .replace(">", "-")
+                .replace("|", "-")
                 Log.i("zzz","downloadinvoice----->")
                 val accesstoken = sharedPref.getString("accesstoken", "")
                 val final_token = "Bearer " + accesstoken
@@ -328,7 +338,7 @@ class VideoPlayerActivity: AppCompatActivity(), AudioManager.OnAudioFocusChangeL
                         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_ONLY_COMPLETION)
                         request.setDestinationInExternalPublicDir(
                             Environment.DIRECTORY_DOWNLOADS,
-                            "eKuhipath-${videoname}.pdf"
+                            "eKuhipath-${replacedVideoname}.pdf"
                         )
 
                         mgr.enqueue(request)

@@ -31,9 +31,15 @@ class PaidCoursesActivity: AppCompatActivity() {
         binding = ActivityPaidCoursesBinding.inflate(layoutInflater)
         setContentView(binding.root)
         val backbtn = findViewById<ImageView>(R.id.unpaid_backbtn)
+        sharedPref = this.getSharedPreferences("sharedpref", PRIVATE_MODE)
 
         backbtn.setOnClickListener{
             GlobalPaidCourse.paidCourses = null
+            if (sharedPref.contains("segment")){
+                val editor = sharedPref.edit()
+                editor.remove("segment")
+                editor.apply()
+            }
             val intent = Intent(this,WelcomeActivity::class.java)
             startActivity(intent)
         }
@@ -42,12 +48,31 @@ class PaidCoursesActivity: AppCompatActivity() {
         // Get the NavController from the NavHostFragment
         navController = navHostFragment.navController
 
-        binding.paidcoursesCard.setCardBackgroundColor(Color.parseColor("#253A4B"))
-        binding.coursestxt.setTextColor(Color.parseColor("#FFFFFF"))
+        if (!sharedPref.contains("segment")){
+            coursesFrag()
+        }
+        else if (sharedPref.contains("segment")){
+            val segment = sharedPref.getString("segment","")
+            Log.i("zz","segment--->"+segment)
+
+            if (segment == "courses"){
+                coursesFrag()
+            }
+            else if (segment == "pdfcourses"){
+                pdfFrag()
+            }
+            else if (segment == "mock"){
+                mockFrag()
+            }
+        }
+        /*binding.paidcoursesCard.setCardBackgroundColor(Color.parseColor("#253A4B"))
+        binding.coursestxt.setTextColor(Color.parseColor("#FFFFFF"))*/
 
         binding.paidcoursesCard.setOnClickListener {
             Log.i("zz","paidcourse2----->")
-
+            val editor = sharedPref.edit()
+            editor.putString("segment","courses")
+            editor.apply()
             navController.navigate(R.id.action_courses)
             Log.i("zz","paidcourse3----->")
             binding.paidcoursesCard.setCardBackgroundColor(Color.parseColor("#253A4B"))
@@ -62,6 +87,9 @@ class PaidCoursesActivity: AppCompatActivity() {
         }
 
         binding.pdfCourseCard.setOnClickListener {
+            val editor = sharedPref.edit()
+            editor.putString("segment","pdfcourses")
+            editor.apply()
             navController.navigate(R.id.action_pdf)
 
             binding.pdfCourseCard.setCardBackgroundColor(Color.parseColor("#253A4B"))
@@ -75,6 +103,9 @@ class PaidCoursesActivity: AppCompatActivity() {
         }
 
         binding.mockCourseCard.setOnClickListener {
+            val editor = sharedPref.edit()
+            editor.putString("segment","mock")
+            editor.apply()
             navController.navigate(R.id.action_mock)
 
             binding.mockCourseCard.setCardBackgroundColor(Color.parseColor("#253A4B"))
@@ -88,8 +119,52 @@ class PaidCoursesActivity: AppCompatActivity() {
         }
     }
 
+    fun coursesFrag(){
+        navController.navigate(R.id.action_courses)
+        Log.i("zz","paidcourse3----->")
+        binding.paidcoursesCard.setCardBackgroundColor(Color.parseColor("#253A4B"))
+        binding.coursestxt.setTextColor(Color.parseColor("#FFFFFF"))
+
+        binding.pdfCourseCard.setCardBackgroundColor(Color.parseColor("#FFFFFF"))
+        binding.pdftxt.setTextColor(Color.parseColor("#000000"))
+
+        binding.mockCourseCard.setCardBackgroundColor(Color.parseColor("#FFFFFF"))
+        binding.mocktxt.setTextColor(Color.parseColor("#000000"))
+    }
+
+    fun pdfFrag(){
+        navController.navigate(R.id.action_pdf)
+
+        binding.pdfCourseCard.setCardBackgroundColor(Color.parseColor("#253A4B"))
+        binding.pdftxt.setTextColor(Color.parseColor("#FFFFFF"))
+
+        binding.paidcoursesCard.setCardBackgroundColor(Color.parseColor("#FFFFFF"))
+        binding.coursestxt.setTextColor(Color.parseColor("#000000"))
+
+        binding.mockCourseCard.setCardBackgroundColor(Color.parseColor("#FFFFFF"))
+        binding.mocktxt.setTextColor(Color.parseColor("#000000"))
+    }
+
+    fun mockFrag(){
+        navController.navigate(R.id.action_mock)
+
+        binding.mockCourseCard.setCardBackgroundColor(Color.parseColor("#253A4B"))
+        binding.mocktxt.setTextColor(Color.parseColor("#FFFFFF"))
+
+        binding.paidcoursesCard.setCardBackgroundColor(Color.parseColor("#FFFFFF"))
+        binding.coursestxt.setTextColor(Color.parseColor("#000000"))
+
+        binding.pdfCourseCard.setCardBackgroundColor(Color.parseColor("#FFFFFF"))
+        binding.pdftxt.setTextColor(Color.parseColor("#000000"))
+    }
+
     override fun onBackPressed() {
         GlobalPaidCourse.paidCourses = null
+        if (sharedPref.contains("segment")){
+            val editor = sharedPref.edit()
+            editor.remove("segment")
+            editor.apply()
+        }
         val intent = Intent(this,WelcomeActivity::class.java)
         startActivity(intent)
     }

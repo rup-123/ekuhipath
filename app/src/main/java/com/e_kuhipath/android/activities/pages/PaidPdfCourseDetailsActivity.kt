@@ -21,6 +21,7 @@ import com.e_kuhipath.android.R
 import com.e_kuhipath.android.activities.adapters.PaidPdfCourseFileAdapter
 import com.e_kuhipath.android.activities.adapters.ParentPaidCourseAdapter
 import com.e_kuhipath.android.activities.authentication.LoginActivity
+import com.e_kuhipath.android.activities.common.BottomNavActivity
 import com.e_kuhipath.android.databinding.ActivityPaidCoursedetailsBinding
 import com.e_kuhipath.android.databinding.ActivityPaidPdfcoursedetailsBinding
 import com.e_kuhipath.android.models.PaidCourseDetails
@@ -75,6 +76,16 @@ class PaidPdfCourseDetailsActivity: AppCompatActivity(), NetworkChangeReceiver.N
             startActivity(intent)
         }
         Log.i("zz","oncreate---->")
+        val home = findViewById<View>(R.id.home)
+        val purchases = findViewById<View>(R.id.purchases)
+        val downloads = findViewById<View>(R.id.downloads)
+        val help = findViewById<View>(R.id.help)
+
+
+        home.setOnClickListener(BottomNavActivity(this))
+        purchases.setOnClickListener(BottomNavActivity(this))
+        downloads.setOnClickListener(BottomNavActivity(this))
+        help.setOnClickListener(BottomNavActivity(this))
     }
 
     override fun onResume() {
@@ -208,6 +219,8 @@ class PaidPdfCourseDetailsActivity: AppCompatActivity(), NetworkChangeReceiver.N
             // Show a message to the user that there is no internet connectivity
             Toast.makeText(this, "No internet connectivity!", Toast.LENGTH_SHORT).show()
         }
+
+
     }
 
     private fun setUpUI(code: List<PaidPdfCourseFile>) {
