@@ -210,7 +210,7 @@ class PaidCourseDetailsActivity: AppCompatActivity(), NetworkChangeReceiver.Netw
     private fun playVideo(videoid: String,videoname:String,pdfpath:String?) {
         // implement video playback logic
 
-        val video_thumbnail = "https://www.ekuhipath.com/api/ekuhipath-v1/video-course/get-video-thumbnail/" +  videoid
+        val video_thumbnail = "https://www.app.ekuhipath.com/api/ekuhipath-v1/video-course/get-video-thumbnail/" +  videoid
 
         Log.i("zz","playvideo---->"+videoid)
         val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -247,7 +247,7 @@ class PaidCourseDetailsActivity: AppCompatActivity(), NetworkChangeReceiver.Netw
                                 Toast.makeText(this@PaidCourseDetailsActivity,"Video Unavailable",Toast.LENGTH_LONG).show()
                             }
                             else {
-                                val videoUrl = "https://www.ekuhipath.com/api/ekuhipath-v1/video-course/watch/$subcourseid/$videoid/${code.data.video_details.main_video_name}"
+                                val videoUrl = "https://www.app.ekuhipath.com/api/ekuhipath-v1/video-course/watch/$subcourseid/$videoid/${code.data.video_details.main_video_name}"
                                 /*val dialogFragment = VideoDialogFragment()
                                 val args = Bundle()
                                 args.putString("video_url", videoUrl)

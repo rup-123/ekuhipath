@@ -313,7 +313,7 @@ class VideoPlayerActivity: AppCompatActivity(), AudioManager.OnAudioFocusChangeL
         }
         download_pdf.setOnClickListener {
                 Toast.makeText(this,"Downloading...",Toast.LENGTH_LONG).show()
-                val video_pdf = "https://www.ekuhipath.com/api/ekuhipath-v1/video-course/get-video-pdf/" +  videoid
+                val video_pdf = "https://www.app.ekuhipath.com/api/ekuhipath-v1/video-course/get-video-pdf/" +  videoid
                 Log.i("ee","video_pdf--->"+video_pdf)
             val replacedVideoname = videoname!!
                 .replace("/", "-")

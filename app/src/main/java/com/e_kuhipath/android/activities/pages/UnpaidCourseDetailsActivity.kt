@@ -183,7 +183,7 @@ class UnpaidCourseDetailsActivity: AppCompatActivity() {
         val data = unpaidCourseDetailsReturn.data.unpaidcourse.sub_course_details
         //val data = "<html><p class=\"MsoNormal\" style=\"text-align:justify\"><span lang=\"EN-US\" style=\"font-size:12.0pt;line-height:107%;font-family:&quot;Book Antiqua&quot;,serif\">It<br>has both quantitative and reasoning part as prescribed in the new <b>APSC CCE<br>Syllabus</b>. The course will have around 30 lectures. Course materials can be<br>downloaded from the website and the students will have access to the video<br>lectures for six months from the date of enrollment.<o:p></o:p></span></p></html>"
         view.loadData(data, "text/html; charset=utf-8", "utf-8")
-        val img_url = "https://www.ekuhipath.com/api/ekuhipath-v1/video-course/get-course-thumbnail/" + sub_course_id
+        val img_url = "https://www.app.ekuhipath.com/api/ekuhipath-v1/video-course/get-course-thumbnail/" + sub_course_id
         Glide.with(context)
             .load(img_url)
             .timeout(60000)

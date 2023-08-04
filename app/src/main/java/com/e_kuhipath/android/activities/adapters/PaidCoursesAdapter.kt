@@ -38,7 +38,7 @@ class PaidCoursesAdapter(var paidCourses: PaidCourses, var context: Context): Re
     override fun onBindViewHolder(holder: DataViewHolder, position: Int) {
         holder.paidcourse_title.text = paidCourses.data.paidCourse[position].sub_course_name
         holder.paidcourse_lang.text = paidCourses.data.paidCourse[position].language
-        val img_url = "https://www.ekuhipath.com/api/ekuhipath-v1/video-course/get-course-thumbnail/" +  paidCourses.data.paidCourse[position].sub_course_id
+        val img_url = "https://www.app.ekuhipath.com/api/ekuhipath-v1/video-course/get-course-thumbnail/" +  paidCourses.data.paidCourse[position].sub_course_id
 
         Glide.with(holder.itemView.context)
             .load(img_url)

@@ -52,7 +52,7 @@ class UnpaidPdfCourseAdapter(var unpaidcourses: UnpaidPdfCourseData): RecyclerVi
         holder.noofpages.text = unpaidcourses.unpaid_courses[position].no_of_pages + " pages"
         holder.unpaidpdfcourseduration.text = unpaidcourses.unpaid_courses[position].course_duration + " months"
 
-        val img_url = "https://www.ekuhipath.com/" + unpaidcourses.unpaid_courses[position].image_path
+        val img_url = "https://www.app.ekuhipath.com/" + unpaidcourses.unpaid_courses[position].image_path
 
         Glide.with(context)
             .load(img_url)
@@ -95,7 +95,7 @@ class UnpaidPdfCourseAdapter(var unpaidcourses: UnpaidPdfCourseData): RecyclerVi
 
             val course_id = unpaidcourses.unpaidcourse[position].sub_course_id
 
-            val img_url = "https://www.ekuhipath.com/api/ekuhipath-v1/video-course/get-course-thumbnail/" + course_id
+            val img_url = "https://www.app.ekuhipath.com/api/ekuhipath-v1/video-course/get-course-thumbnail/" + course_id
             Glide.with(context)
                 .load(img_url)
                 .timeout(60000)

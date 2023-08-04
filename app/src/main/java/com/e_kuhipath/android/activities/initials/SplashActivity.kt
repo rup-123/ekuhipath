@@ -128,6 +128,7 @@ class SplashActivity : AppCompatActivity() {
                 }
                 RESULT_IN_APP_UPDATE_FAILED -> {
                     // Update failed, general error
+                    finish()
                 }
             }
         }

@@ -70,7 +70,7 @@ class UnpaidCourseAdapter(var unpaidcourses: UnpaidCourses): RecyclerView.Adapte
 
             val course_id = unpaidcourses.unpaidcourse[position].sub_course_id
 
-            val img_url = "https://www.ekuhipath.com/api/ekuhipath-v1/video-course/get-course-thumbnail/" + course_id
+            val img_url = "https://www.app.ekuhipath.com/api/ekuhipath-v1/video-course/get-course-thumbnail/" + course_id
             Glide.with(context)
                 .load(img_url)
                 .timeout(60000)
