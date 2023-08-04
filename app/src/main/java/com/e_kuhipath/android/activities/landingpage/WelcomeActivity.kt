@@ -177,9 +177,25 @@ class WelcomeActivity: AppCompatActivity() {
         }
         val onlineclass = findViewById<LinearLayout>(R.id.onlineclass)
         val pdf = findViewById<LinearLayout>(R.id.pdf)
+        val mock = findViewById<LinearLayout>(R.id.mock)
+        val livesession = findViewById<LinearLayout>(R.id.livesession)
+        val answerwriting = findViewById<LinearLayout>(R.id.answerwriting)
+        val syllabus = findViewById<LinearLayout>(R.id.syllabus)
         onlineclass.setOnClickListener{
             val intent = Intent(this,UnpaidCoursesActivity::class.java)
             startActivity(intent)
+        }
+        mock.setOnClickListener{
+            Toast.makeText(this,"To be available soon!!",Toast.LENGTH_SHORT).show()
+        }
+        livesession.setOnClickListener{
+            Toast.makeText(this,"To be available soon!!",Toast.LENGTH_SHORT).show()
+        }
+        answerwriting.setOnClickListener{
+            Toast.makeText(this,"To be available soon!!",Toast.LENGTH_SHORT).show()
+        }
+        syllabus.setOnClickListener{
+            Toast.makeText(this,"To be available soon!!",Toast.LENGTH_SHORT).show()
         }
         pdf.setOnClickListener{
             val intent = Intent(this, UnpaidPdfCourseActivity::class.java)

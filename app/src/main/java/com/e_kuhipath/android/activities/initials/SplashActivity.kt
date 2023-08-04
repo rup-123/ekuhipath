@@ -87,7 +87,6 @@ class SplashActivity : AppCompatActivity() {
             editor.apply()
         }
 
-        Handler().postDelayed({
             val switch = sharedPref.getString("switch", "0")
             Log.i("vvv", "switch--->"+switch)
             if(switch == "0"){
@@ -100,18 +99,7 @@ class SplashActivity : AppCompatActivity() {
                 startActivity(intent)
                 finish()
             }
-        }, 3000) // 3000 is the delayed time in milliseconds.
 
-    /*val switch = sharedPref.getString("switch", "0")
-        Log.i("vvv", "switch--->" + switch)
-        if (switch == "0") {
-            val intent = Intent(this, LoginActivity::class.java)
-            startActivity(intent)
-        } else if (switch == "1") {
-            val intent = Intent(this, WelcomeActivity::class.java)
-            startActivity(intent)
-        }
-        finish()*/
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
