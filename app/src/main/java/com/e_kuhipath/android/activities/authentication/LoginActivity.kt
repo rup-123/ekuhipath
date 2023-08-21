@@ -46,7 +46,7 @@ class LoginActivity: AppCompatActivity() {
 
         val mobileno = findViewById<TextInputEditText>(R.id.mobileno_et)
         val password = findViewById<TextInputEditText>(R.id.password_et)
-        val forgotpasslink = "https://www.app.ekuhipath.com/forgot-password"
+        val forgotpasslink = "https://www.ekuhica.com/forgot-password"
         val a = IsOnline()
         val isOnline = a.isOnline(this)
         if (isOnline == false) {

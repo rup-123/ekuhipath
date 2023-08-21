@@ -235,7 +235,7 @@ class VideoPlayerActivity: AppCompatActivity(), AudioManager.OnAudioFocusChangeL
 
         gestureDetector = GestureDetector(this, object : GestureDetector.SimpleOnGestureListener() {
 
-            override fun onDoubleTap(e: MotionEvent?): Boolean {
+            override fun onDoubleTap(e: MotionEvent): Boolean {
                 // Calculate the tap position relative to the center of the player view
                 val center = Point(playerView!!.width / 2, playerView.height / 2)
                 val tap = Point(e!!.x.toInt(), e.y.toInt())
@@ -313,7 +313,7 @@ class VideoPlayerActivity: AppCompatActivity(), AudioManager.OnAudioFocusChangeL
         }
         download_pdf.setOnClickListener {
                 Toast.makeText(this,"Downloading...",Toast.LENGTH_LONG).show()
-                val video_pdf = "https://www.app.ekuhipath.com/api/ekuhipath-v1/video-course/get-video-pdf/" +  videoid
+                val video_pdf = "https://www.ekuhica.com/api/ekuhipath-v1/video-course/get-video-pdf/" +  videoid
                 Log.i("ee","video_pdf--->"+video_pdf)
             val replacedVideoname = videoname!!
                 .replace("/", "-")
@@ -485,7 +485,7 @@ class VideoPlayerActivity: AppCompatActivity(), AudioManager.OnAudioFocusChangeL
         audioManager?.abandonAudioFocus(this)
 
     }
-    override fun onDown(p0: MotionEvent?): Boolean {
+    /*override fun onDown(p0: MotionEvent?): Boolean {
         return false
     }
     override fun onShowPress(p0: MotionEvent?) = Unit
@@ -495,7 +495,7 @@ class VideoPlayerActivity: AppCompatActivity(), AudioManager.OnAudioFocusChangeL
 
     override fun onScroll(event: MotionEvent?, event1: MotionEvent?, distanceX: Float, distanceY: Float): Boolean {
         return true
-    }
+    }*/
 
     override fun onBackPressed() {
         Log.e("cll","closebutton--->")
@@ -507,6 +507,40 @@ class VideoPlayerActivity: AppCompatActivity(), AudioManager.OnAudioFocusChangeL
         intent.putExtra("subcourseid",subcourseid)
         intent.putExtra("totalvideos",videos)
         startActivity(intent)
+    }
+
+    override fun onDown(e: MotionEvent): Boolean {
+        TODO("Not yet implemented")
+    }
+
+    override fun onShowPress(e: MotionEvent) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onSingleTapUp(e: MotionEvent): Boolean {
+        TODO("Not yet implemented")
+    }
+
+    override fun onScroll(
+        e1: MotionEvent,
+        e2: MotionEvent,
+        distanceX: Float,
+        distanceY: Float
+    ): Boolean {
+        TODO("Not yet implemented")
+    }
+
+    override fun onLongPress(e: MotionEvent) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onFling(
+        e1: MotionEvent,
+        e2: MotionEvent,
+        velocityX: Float,
+        velocityY: Float
+    ): Boolean {
+        TODO("Not yet implemented")
     }
 
 }

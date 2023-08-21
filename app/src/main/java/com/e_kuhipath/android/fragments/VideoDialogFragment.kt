@@ -165,6 +165,32 @@ class VideoDialogFragment : DialogFragment(), AudioManager.OnAudioFocusChangeLis
             showQuickDisplay(-10)
         }
 
+        gestureDetector = GestureDetector(
+            requireContext(),
+            object : GestureDetector.SimpleOnGestureListener(), GestureDetector.OnDoubleTapListener {
+
+                @SuppressLint("ClickableViewAccessibility")
+                override fun onDoubleTap(e: MotionEvent): Boolean {
+                    // Your double tap logic here
+                    val center = Point(playerView!!.width / 2, playerView.height / 2)
+                    val tap = Point(e!!.x.toInt(), e.y.toInt())
+                    val distance = tap.x - center.x
+
+                    // Calculate the skip amount based on the tap position
+                    val skipSeconds = if (distance > 0) 10 else -10
+
+                    // Skip forward or backward
+                    player?.seekTo(player!!.currentPosition + skipSeconds * 1000)
+
+                    showQuickDisplay(skipSeconds)
+
+                    return super.onDoubleTap(e)
+                }
+
+
+            }
+        )
+/*
         gestureDetector = GestureDetector(requireContext(), object : GestureDetector.SimpleOnGestureListener() {
 
             override fun onDoubleTap(e: MotionEvent?): Boolean {
@@ -186,6 +212,7 @@ class VideoDialogFragment : DialogFragment(), AudioManager.OnAudioFocusChangeLis
 
 
         })
+*/
 
         playerView.setOnTouchListener { _, event ->
             gestureDetector.onTouchEvent(event)

@@ -18,6 +18,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import com.e_kuhipath.android.R
 import com.e_kuhipath.android.activities.authentication.LoginActivity
 import com.e_kuhipath.android.activities.common.BottomNavActivity
+import com.e_kuhipath.android.activities.pages.MagazineActivity
 import com.e_kuhipath.android.activities.pages.UnpaidCoursesActivity
 import com.e_kuhipath.android.activities.pages.UnpaidPdfCourseActivity
 import com.e_kuhipath.android.models.StudentLogoutTokens
@@ -188,12 +189,14 @@ class WelcomeActivity: AppCompatActivity() {
         mock.setOnClickListener{
             Toast.makeText(this,"To be available soon!!",Toast.LENGTH_SHORT).show()
         }
+        answerwriting.setOnClickListener{
+            val intent = Intent(this, MagazineActivity::class.java)
+            startActivity(intent)        }
+
         livesession.setOnClickListener{
             Toast.makeText(this,"To be available soon!!",Toast.LENGTH_SHORT).show()
         }
-        answerwriting.setOnClickListener{
-            Toast.makeText(this,"To be available soon!!",Toast.LENGTH_SHORT).show()
-        }
+
         syllabus.setOnClickListener{
             Toast.makeText(this,"To be available soon!!",Toast.LENGTH_SHORT).show()
         }

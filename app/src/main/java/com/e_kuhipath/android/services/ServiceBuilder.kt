@@ -101,7 +101,7 @@ object ServiceBuilder{
 
 
     fun <T> buildService(serviceType: Class<T>): T {
-        URL = "https://www.app.ekuhipath.com/api/ekuhipath-v1/"
+        URL = "https://www.ekuhica.com/api/ekuhipath-v1/"
         Log.i("qqq","URL->"+URL)
         try {
             okHttp = OkHttpClient.Builder()

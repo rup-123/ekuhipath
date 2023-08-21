@@ -67,7 +67,7 @@ class PaidPdfCourseFileAdapter(var paidPdfCourseFile: List<PaidPdfCourseFile>): 
             .into(holder.img2)
         holder.paidpdfdetailscard.setOnClickListener {
             Toast.makeText(context,"Downloading...", Toast.LENGTH_LONG).show()
-            val video_pdf = "https://www.app.ekuhipath.com/api/ekuhipath-v1/pdf-course/download-paid-pdf-course-file/" +  paidPdfCourseFile[position].pdf_file_id
+            val video_pdf = "https://www.ekuhica.com/api/ekuhipath-v1/pdf-course/download-paid-pdf-course-file/" +  paidPdfCourseFile[position].pdf_file_id
 
             Log.i("zzz","downloadinvoice----->")
 

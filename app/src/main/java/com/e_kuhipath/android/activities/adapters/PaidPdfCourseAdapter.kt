@@ -46,7 +46,7 @@ class PaidPdfCourseAdapter(var paidPdfCourse: List<PaidPdfCourse>): RecyclerView
         holder.pdfno.text = paidPdfCourse[position].no_of_pdf + " pdfs"
         holder.noofpages.text = paidPdfCourse[position].no_of_pages + " pages"
 
-        val img_url = "https://www.app.ekuhipath.com/" +paidPdfCourse[position].image_path
+        val img_url = "https://www.ekuhica.com/" +paidPdfCourse[position].image_path
 
         Glide.with(context)
             .load(img_url)
@@ -85,7 +85,7 @@ class PaidPdfCourseAdapter(var paidPdfCourse: List<PaidPdfCourse>): RecyclerView
 
             val course_id = unpaidcourses.unpaidcourse[position].sub_course_id
 
-            val img_url = "https://www.app.ekuhipath.com/api/ekuhipath-v1/video-course/get-course-thumbnail/" + course_id
+            val img_url = "https://www.ekuhica.com/api/ekuhipath-v1/video-course/get-course-thumbnail/" + course_id
             Glide.with(context)
                 .load(img_url)
                 .timeout(60000)

@@ -266,14 +266,14 @@
                         <ImageView
                             android:layout_width="match_parent"
                             android:layout_height="60dp"
-                            android:src="@drawable/answerwriting" />
+                            android:src="@drawable/magazine_logo" />
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
                             android:fontFamily="@font/nunito_bold"
-                            android:text="Answer Writing"
+                            android:text="Magazines"
                             android:textAlignment="center"
                             android:textColor="@color/colorPrimaryDark"
                             android:textSize="14sp" />
