@@ -69,7 +69,8 @@ class UnpaidCourseAdapter(var unpaidcourses: UnpaidCourses): RecyclerView.Adapte
             val buy_now = sliderLayout.findViewById<TextView>(R.id.buy_now)
 
             val course_id = unpaidcourses.unpaidcourse[position].sub_course_id
-
+            val courseprice =  unpaidcourses.unpaidcourse[position].price
+            val coursename = unpaidcourses.unpaidcourse[position].sub_course_name
             val img_url = "https://www.ekuhica.com/api/ekuhipath-v1/video-course/get-course-thumbnail/" + course_id
             Glide.with(context)
                 .load(img_url)
@@ -80,6 +81,8 @@ class UnpaidCourseAdapter(var unpaidcourses: UnpaidCourses): RecyclerView.Adapte
             price.text = "\u20B9"+unpaidcourses.unpaidcourse[position].price
 
             buy_now.setOnClickListener{
+
+
                 if (unpaidcourses.unpaidcourse[position].payment_type == "OFF"){
                    // Log.i("zz","gformlink--->"+unpaidcourses.unpaidcourse[position].g_form_link)
                     val gformlink = "https://"+unpaidcourses.unpaidcourse[position].g_form_link

@@ -366,4 +366,25 @@
         android:layout_marginHorizontal="20dp"
         android:text="Download Pdf"
         app:layout_constraintTop_toBottomOf="@+id/playbackspeed"/>
+
+    <Button
+        android:id="@+id/download_offline"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:visibility="gone"
+        android:backgroundTint="@color/colorPrimaryDark"
+        android:layout_marginTop="20dp"
+        android:layout_marginHorizontal="20dp"
+        android:text="Download Offline"
+        app:layout_constraintTop_toBottomOf="@+id/download_pdf"/>
+
+    <ProgressBar
+        android:id="@+id/progressBarDownload"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="50dp"
+        android:minWidth="200dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@+id/download_offline"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

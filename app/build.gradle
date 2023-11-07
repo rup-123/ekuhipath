@@ -13,8 +13,8 @@ android {
         applicationId "com.e_kuhipath.android"
         minSdk 21
         targetSdk 33
-        versionCode 8
-        versionName "1.7"
+        versionCode 10
+        versionName "1.8"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -108,5 +108,8 @@ dependencies {
     def nav_version = "2.5.3"
     implementation "androidx.navigation:navigation-fragment:$nav_version"
     implementation "androidx.navigation:navigation-ui:$nav_version"
+
+
+
 
 }

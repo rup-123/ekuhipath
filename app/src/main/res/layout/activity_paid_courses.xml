@@ -153,6 +153,32 @@
                         android:textSize="12sp" />
                 </com.google.android.material.card.MaterialCardView>
 
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/download_video_card"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="20dp"
+            app:cardElevation="20dp"
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:background="@drawable/card_background"
+            android:clickable="true"
+            android:focusable="true"
+            app:cardCornerRadius="8dp">
+
+            <TextView
+                android:id="@+id/downloadvideotxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/nunito"
+                android:paddingHorizontal="10dp"
+                android:text="Downloads"
+                android:textColor="@color/black"
+                android:textSize="10sp" />
+        </com.google.android.material.card.MaterialCardView>
 
         </LinearLayout>
 

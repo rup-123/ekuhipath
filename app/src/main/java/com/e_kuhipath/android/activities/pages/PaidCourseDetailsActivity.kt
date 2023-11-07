@@ -257,6 +257,7 @@ class PaidCourseDetailsActivity: AppCompatActivity(), NetworkChangeReceiver.Netw
                                 dialogFragment.show(supportFragmentManager, "VideoDialogFragment")*/
                                 val intent = Intent(this@PaidCourseDetailsActivity,VideoPlayerActivity::class.java)
                                 intent.putExtra("video_url",videoUrl)
+                                intent.putExtra("main_video_name",code.data.video_details.main_video_name)
                                 intent.putExtra("video_thumbnail",video_thumbnail)
                                 intent.putExtra("videoname",videoname)
                                 intent.putExtra("videoid",videoid)

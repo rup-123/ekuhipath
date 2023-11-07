@@ -64,6 +64,11 @@ class PaidCoursesActivity: AppCompatActivity() {
             else if (segment == "mock"){
                 mockFrag()
             }
+            else if (segment == "downloads"){
+                Log.i("zz","dwnld--->"+segment)
+
+                downloadFrag()
+            }
         }
         /*binding.paidcoursesCard.setCardBackgroundColor(Color.parseColor("#253A4B"))
         binding.coursestxt.setTextColor(Color.parseColor("#FFFFFF"))*/
@@ -84,8 +89,31 @@ class PaidCoursesActivity: AppCompatActivity() {
             binding.mockCourseCard.setCardBackgroundColor(Color.parseColor("#FFFFFF"))
             binding.mocktxt.setTextColor(Color.parseColor("#000000"))
 
+            binding.downloadVideoCard.setCardBackgroundColor(Color.parseColor("#FFFFFF"))
+            binding.downloadvideotxt.setTextColor(Color.parseColor("#000000"))
+
         }
 
+        binding.downloadVideoCard.setOnClickListener {
+            Log.i("zz","paidcourse2----->")
+            val editor = sharedPref.edit()
+            editor.putString("segment","downloads")
+            editor.apply()
+            navController.navigate(R.id.action_downloads)
+            Log.i("zz","paidcourse3----->")
+            binding.paidcoursesCard.setCardBackgroundColor(Color.parseColor("#FFFFFF"))
+            binding.coursestxt.setTextColor(Color.parseColor("#000000"))
+
+            binding.pdfCourseCard.setCardBackgroundColor(Color.parseColor("#FFFFFF"))
+            binding.pdftxt.setTextColor(Color.parseColor("#000000"))
+
+            binding.mockCourseCard.setCardBackgroundColor(Color.parseColor("#FFFFFF"))
+            binding.mocktxt.setTextColor(Color.parseColor("#000000"))
+
+            binding.downloadVideoCard.setCardBackgroundColor(Color.parseColor("#253A4B"))
+            binding.downloadvideotxt.setTextColor(Color.parseColor("#FFFFFF"))
+
+        }
         binding.pdfCourseCard.setOnClickListener {
             val editor = sharedPref.edit()
             editor.putString("segment","pdfcourses")
@@ -100,6 +128,9 @@ class PaidCoursesActivity: AppCompatActivity() {
 
             binding.mockCourseCard.setCardBackgroundColor(Color.parseColor("#FFFFFF"))
             binding.mocktxt.setTextColor(Color.parseColor("#000000"))
+
+            binding.downloadVideoCard.setCardBackgroundColor(Color.parseColor("#FFFFFF"))
+            binding.downloadvideotxt.setTextColor(Color.parseColor("#000000"))
         }
 
         binding.mockCourseCard.setOnClickListener {
@@ -116,11 +147,15 @@ class PaidCoursesActivity: AppCompatActivity() {
 
             binding.pdfCourseCard.setCardBackgroundColor(Color.parseColor("#FFFFFF"))
             binding.pdftxt.setTextColor(Color.parseColor("#000000"))
+
+            binding.downloadVideoCard.setCardBackgroundColor(Color.parseColor("#FFFFFF"))
+            binding.downloadvideotxt.setTextColor(Color.parseColor("#000000"))
         }
     }
 
     fun coursesFrag(){
         navController.navigate(R.id.action_courses)
+
         Log.i("zz","paidcourse3----->")
         binding.paidcoursesCard.setCardBackgroundColor(Color.parseColor("#253A4B"))
         binding.coursestxt.setTextColor(Color.parseColor("#FFFFFF"))
@@ -130,6 +165,9 @@ class PaidCoursesActivity: AppCompatActivity() {
 
         binding.mockCourseCard.setCardBackgroundColor(Color.parseColor("#FFFFFF"))
         binding.mocktxt.setTextColor(Color.parseColor("#000000"))
+
+        binding.downloadVideoCard.setCardBackgroundColor(Color.parseColor("#FFFFFF"))
+        binding.downloadvideotxt.setTextColor(Color.parseColor("#000000"))
     }
 
     fun pdfFrag(){
@@ -143,6 +181,9 @@ class PaidCoursesActivity: AppCompatActivity() {
 
         binding.mockCourseCard.setCardBackgroundColor(Color.parseColor("#FFFFFF"))
         binding.mocktxt.setTextColor(Color.parseColor("#000000"))
+
+        binding.downloadVideoCard.setCardBackgroundColor(Color.parseColor("#FFFFFF"))
+        binding.downloadvideotxt.setTextColor(Color.parseColor("#000000"))
     }
 
     fun mockFrag(){
@@ -156,6 +197,26 @@ class PaidCoursesActivity: AppCompatActivity() {
 
         binding.pdfCourseCard.setCardBackgroundColor(Color.parseColor("#FFFFFF"))
         binding.pdftxt.setTextColor(Color.parseColor("#000000"))
+
+        binding.downloadVideoCard.setCardBackgroundColor(Color.parseColor("#FFFFFF"))
+        binding.downloadvideotxt.setTextColor(Color.parseColor("#000000"))
+    }
+
+    fun downloadFrag(){
+        navController.navigate(R.id.action_downloads)
+        Log.i("zz","dwnldkk--->")
+
+        binding.paidcoursesCard.setCardBackgroundColor(Color.parseColor("#FFFFFF"))
+        binding.coursestxt.setTextColor(Color.parseColor("#000000"))
+
+        binding.pdfCourseCard.setCardBackgroundColor(Color.parseColor("#FFFFFF"))
+        binding.pdftxt.setTextColor(Color.parseColor("#000000"))
+
+        binding.mockCourseCard.setCardBackgroundColor(Color.parseColor("#FFFFFF"))
+        binding.mocktxt.setTextColor(Color.parseColor("#000000"))
+
+        binding.downloadVideoCard.setCardBackgroundColor(Color.parseColor("#253A4B"))
+        binding.downloadvideotxt.setTextColor(Color.parseColor("#FFFFFF"))
     }
 
     override fun onBackPressed() {

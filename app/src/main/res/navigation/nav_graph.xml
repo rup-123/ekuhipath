@@ -20,7 +20,15 @@
         android:id="@+id/mockFragment"
         android:name="com.e_kuhipath.android.fragments.MockFragment"
         android:label="Mock Fragment"
-        tools:layout="@layout/fragment_mock" />
+        tools:layout="@layout/fragment_mock" >
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/downloadsFragment"
+        android:name="com.e_kuhipath.android.fragments.DownloadsFragment"
+        android:label="Downloads Fragment"
+        tools:layout="@layout/fragment_downloads" />
 
     <action
         android:id="@+id/action_courses"
@@ -33,5 +41,8 @@
     <action
         android:id="@+id/action_mock"
         app:destination="@id/mockFragment" />
+    <action
+        android:id="@+id/action_downloads"
+        app:destination="@id/downloadsFragment" />
 
 </navigation>

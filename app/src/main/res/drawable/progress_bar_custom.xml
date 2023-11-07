@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- White background for the remaining progress -->
+    <item android:id="@android:id/background">
+        <shape>
+            <solid android:color="#FFFFFF" />
+        </shape>
+    </item>
+    <!-- Green color for the completed progress -->
+    <item android:id="@android:id/progress">
+        <clip>
+            <layer-list>
+                <item android:id="@+id/completedProgress">
+                    <shape>
+                        <solid android:color="#00FF00" />
+                    </shape>
+                </item>
+            </layer-list>
+        </clip>
+    </item>
+</layer-list>

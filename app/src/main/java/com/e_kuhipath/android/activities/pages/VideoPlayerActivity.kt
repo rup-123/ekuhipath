@@ -2,17 +2,19 @@ package com.e_kuhipath.android.activities.pages
 
 import android.annotation.SuppressLint
 import android.app.DownloadManager
-import android.content.Context
-import android.content.Intent
-import android.content.SharedPreferences
+import android.app.ProgressDialog
+import android.content.*
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
+import android.graphics.Color
 import android.graphics.Point
+import android.graphics.drawable.LayerDrawable
 import android.media.AudioManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
+import android.os.Handler
 import android.util.Log
 import android.util.TypedValue
 import android.view.*
@@ -21,13 +23,16 @@ import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.core.view.GestureDetectorCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.navigation.fragment.NavHostFragment
 import com.bumptech.glide.Glide
 import com.e_kuhipath.android.R
 import com.e_kuhipath.android.databinding.ActivityVideoPlayerBinding
+import com.e_kuhipath.android.services.DownloadedFilesDatabase
 import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.PlaybackParameters
@@ -35,9 +40,12 @@ import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.source.hls.HlsMediaSource
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout
 import com.google.android.exoplayer2.ui.PlayerView
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_video_player.*
 import kotlinx.android.synthetic.main.fragment_video_dialog.*
+import java.io.File
 import java.lang.Exception
 
 class VideoPlayerActivity: AppCompatActivity(), AudioManager.OnAudioFocusChangeListener, GestureDetector.OnGestureListener {
@@ -67,6 +75,7 @@ class VideoPlayerActivity: AppCompatActivity(), AudioManager.OnAudioFocusChangeL
     private var videos: String? = null
     private var videoid: String? = null
     private var pdfpath: String? = null
+    private var mainvideoname: String? = null
 
     private var playbackPosition: Long = 0
 
@@ -103,12 +112,20 @@ class VideoPlayerActivity: AppCompatActivity(), AudioManager.OnAudioFocusChangeL
         fullScreenBtn = playerView.findViewById(R.id.fullScreenBtn)
         orientationBtn = playerView.findViewById(R.id.orientationBtn)
         val play_btn = findViewById<ImageButton>(R.id.play_button)
+        val download_offline = findViewById<Button>(R.id.download_offline)
         val nextbtn = playerView.findViewById<ImageButton>(R.id.nextBtn)
         val prevbtn = playerView.findViewById<ImageButton>(R.id.prevBtn)
         playerView.useController = true
         playerView.controllerAutoShow = true
         playerView.controllerHideOnTouch = true
 
+        val segment = sharedPref.getString("segment","")
+        Log.i("zz","segment--->"+segment)
+
+        if (segment == "downloads"){
+            download_offline.visibility = View.GONE
+            download_pdf.visibility = View.GONE
+        }
         //for immersive mode
         /*WindowCompat.setDecorFitsSystemWindows(window, false)
         WindowInsetsControllerCompat(window, binding.root).let { controller ->
@@ -164,7 +181,9 @@ class VideoPlayerActivity: AppCompatActivity(), AudioManager.OnAudioFocusChangeL
                 linlayoutstudentprofile.visibility = View.VISIBLE
                 videoTitle.visibility = View.VISIBLE
                 playbackspeed.visibility = View.VISIBLE
-                download_pdf.visibility = View.VISIBLE
+                if (segment!="downloads") {
+                    download_pdf.visibility = View.VISIBLE
+                }
 
 
             }
@@ -191,6 +210,7 @@ class VideoPlayerActivity: AppCompatActivity(), AudioManager.OnAudioFocusChangeL
         videos = intent.getStringExtra("totalvideos")
         videoid = intent.getStringExtra("videoid")
         pdfpath = intent.getStringExtra("pdfpath")
+        mainvideoname = intent.getStringExtra("main_video_name")
 
 
         Log.i("zz","videourl--->"+videoUrl)
@@ -210,15 +230,22 @@ class VideoPlayerActivity: AppCompatActivity(), AudioManager.OnAudioFocusChangeL
             .into(thumbnailImageView)
         val closeButton = findViewById<ImageView>(R.id.close_button)
         closeButton.setOnClickListener {
+
             Log.e("cll","closebutton--->")
             player?.release()
             player = null
 
             audioManager?.abandonAudioFocus(this)
-            val intent = Intent(this,PaidCourseDetailsActivity::class.java)
-            intent.putExtra("subcourseid",subcourseid)
-            intent.putExtra("totalvideos",videos)
-            startActivity(intent)
+            if (segment!="downloads"){
+                val intent = Intent(this,PaidCourseDetailsActivity::class.java)
+                intent.putExtra("subcourseid",subcourseid)
+                intent.putExtra("totalvideos",videos)
+                startActivity(intent)
+            }
+            else{
+                val intent = Intent(this,PaidCoursesActivity::class.java)
+                startActivity(intent)
+            }
 
         }
         nextbtn.setOnClickListener{
@@ -315,7 +342,7 @@ class VideoPlayerActivity: AppCompatActivity(), AudioManager.OnAudioFocusChangeL
                 Toast.makeText(this,"Downloading...",Toast.LENGTH_LONG).show()
                 val video_pdf = "https://www.ekuhica.com/api/ekuhipath-v1/video-course/get-video-pdf/" +  videoid
                 Log.i("ee","video_pdf--->"+video_pdf)
-            val replacedVideoname = videoname!!
+                val replacedVideoname = videoname!!
                 .replace("/", "-")
                 .replace("\\", "-")
                 .replace(":", "-")
@@ -363,23 +390,112 @@ class VideoPlayerActivity: AppCompatActivity(), AudioManager.OnAudioFocusChangeL
 
             }
 
+        download_offline.setOnClickListener {
+            if (download_offline.text == "Download Offline"){
+                val database = DownloadedFilesDatabase(this)
+                downloadVideo(mainvideoname!!,videoUrl!!,videoThumbnail!!, videoname!!,database)
+                download_offline.isClickable = false
+                download_offline.setBackgroundResource(R.drawable.button_disabled_bg) // Set the background to light grey
+                download_offline.setTextColor(ContextCompat.getColor(this, R.color.green)) // Set text color to dark blue
+                download_offline.text = "Downloading..." // Change the text
+                database.close()
+            }
+            else if(download_offline.text == "Go to Downloads"){
+                val intent = Intent(this,PaidCoursesActivity::class.java)
+                val editor = sharedPref.edit()
+                editor.putString("segment","downloads")
+                editor.apply()
+                startActivity(intent)
+            }
+
+        }
+
     }
+
+
+private fun downloadVideo(mainvideoname:String,videoUrl: String, videoThumbnail: String,fileName: String, database: DownloadedFilesDatabase) {
+    val downloadManager = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+    val request = DownloadManager.Request(Uri.parse(videoUrl))
+
+    // Set the destination directory
+    val downloadDir = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
+    request.setDestinationInExternalFilesDir(this, downloadDir?.path, fileName)
+
+    // Enqueue the download request
+    val downloadId = downloadManager.enqueue(request)
+
+    // Register a BroadcastReceiver to listen for download completion
+    val onComplete = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            val id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
+            if (id == downloadId) {
+                // Download completed, insert the video info into the database
+                val filePath = "${downloadDir?.path}/$mainvideoname"
+              //  val videoTitle = "Disaster Management-1 | DM Course"
+
+                // Insert into the database
+                database.addDownloadedFile(fileName, filePath,videoThumbnail)
+                Log.d("Database", "File '$fileName' has been stored in the database.")
+                // Unregister the receiver
+                Log.d("Downloaded Video Path", filePath)
+
+                val snackbar = Snackbar.make(
+                    findViewById(android.R.id.content),
+                    "Download completed",
+                    Snackbar.LENGTH_INDEFINITE
+                )
+
+                // Add an action to dismiss the Snackbar when clicked
+                snackbar.setAction("Dismiss") { snackbar.dismiss() }
+
+                // Set a callback to dismiss the Snackbar after 10 seconds
+                val handler = Handler()
+                handler.postDelayed({ snackbar.dismiss() }, 10000)
+
+                snackbar.show()
+                download_offline.text = "Go to Downloads" // Change the text
+                download_offline.isClickable = true
+                context.unregisterReceiver(this)
+            }
+        }
+    }
+
+    // Register the BroadcastReceiver
+    registerReceiver(onComplete, IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE))
+}
+
+
+
+
 
     private fun buildPlayer() {
         player = SimpleExoPlayer.Builder(this).build()
+        val segment = sharedPref.getString("segment","")
+        context = this
+        if (segment == "downloads"){
+            val dataSourceFactory = DefaultDataSourceFactory(context, "exoplayer")
+            val uri = Uri.parse(videoUrl)
+            val mediaSource = HlsMediaSource.Factory(dataSourceFactory)
+                .createMediaSource(MediaItem.fromUri(uri))
 
+            // Set the media source to the player and prepare it
+            player?.setMediaSource(mediaSource)
+            player?.prepare()
+        }
+        else{
+            val dataSourceFactory = DefaultHttpDataSourceFactory("exoplayer")
+            dataSourceFactory.defaultRequestProperties!!.set("Authorization", final_token!!)
 
-        val dataSourceFactory = DefaultHttpDataSourceFactory("exoplayer")
-        dataSourceFactory.defaultRequestProperties!!.set("Authorization", final_token!!)
+            // Create a MediaSource object from the m3u8 URL
+            val uri = Uri.parse(videoUrl)
+            val mediaSource = HlsMediaSource.Factory(dataSourceFactory)
+                .createMediaSource(MediaItem.fromUri(uri))
 
-        // Create a MediaSource object from the m3u8 URL
-        val uri = Uri.parse(videoUrl)
-        val mediaSource = HlsMediaSource.Factory(dataSourceFactory)
-            .createMediaSource(MediaItem.fromUri(uri))
+            // Set the media source to the player and prepare it
+            player?.setMediaSource(mediaSource)
+            player?.prepare()
 
-        // Set the media source to the player and prepare it
-        player?.setMediaSource(mediaSource)
-        player?.prepare()
+        }
 
         // Attach the player to the PlayerView
 
@@ -503,10 +619,19 @@ class VideoPlayerActivity: AppCompatActivity(), AudioManager.OnAudioFocusChangeL
         player = null
 
         audioManager?.abandonAudioFocus(this)
-        val intent = Intent(this,PaidCourseDetailsActivity::class.java)
-        intent.putExtra("subcourseid",subcourseid)
-        intent.putExtra("totalvideos",videos)
-        startActivity(intent)
+        val segment = sharedPref.getString("segment","")
+        Log.i("zz","segment--->"+segment)
+
+        if (segment != "downloads") {
+            val intent = Intent(this, PaidCourseDetailsActivity::class.java)
+            intent.putExtra("subcourseid", subcourseid)
+            intent.putExtra("totalvideos", videos)
+            startActivity(intent)
+        }
+        else {
+            val intent = Intent(this, PaidCoursesActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     override fun onDown(e: MotionEvent): Boolean {
